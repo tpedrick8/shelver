@@ -216,8 +216,8 @@ align-self:flex-end;overflow:hidden;}
 
 /* status dot */
 .bst{position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;border:2.5px solid white;display:none;z-index:20;}
-.bst
-.bst
+.bst.ok{display:block;background:#16A34A;box-shadow:0 0 6px rgba(22,163,74,0.5);}
+.bst.bad{display:block;background:#DC2626;box-shadow:0 0 6px rgba(220,38,38,0.5);}
 
 /* author strip */
 .b-auth{
@@ -3082,12 +3082,10 @@ function acadCheckOrder(){
       }else{
         teachMsg='Check the numbers carefully. Smaller numbers come first.';
       }
-      showResultOverlay('bad','📚',
+      acadShowResultPanel('bad','📚',
         nOk+' of '+acadBooks.length+' in order',
         teachMsg||(badNames.length===1?'"'+badNames[0]+'" needs to move.':'Check: '+badNames.join(', ')+'.'),
-        'Correct order: '+orderStr,
-        0, 0,
-        function(){ animateAcadBooksToSorted(); });
+        'Correct order: '+orderStr);
     }
   }
 }
