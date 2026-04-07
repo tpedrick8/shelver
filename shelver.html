@@ -1738,7 +1738,7 @@ const NAV=[
       {id:'en-pla-e',label:'Playaway Everybody PB',     preview:'PLA / E / ABB',rawSrc:EN_E,rawFn:x=>['PLA','E',x.c],stype:'alpha'},
     ]},
     {id:'en-nf',label:'Nonfiction',icon:'🔬',modes:'Dewey · Bio · EY NF · Playaway NF',cats:[
-      {id:'en-dew',   label:'Nonfiction (Dewey)',     preview:'523.3 / PAR',      rawSrc:EN_NF,rawFn:x=>[x.c,x.n],stype:'dewey'},
+      {id:'en-dew',   label:'Nonfiction (Dewey)',     preview:'523.3 / PAR',      rawSrc:EN_NF,rawFn:x=>[x.n,x.c],stype:'dewey'},
       {id:'en-bio',   label:'Biography',              preview:'BIO / AUS',        rawSrc:BIO,rawFn:x=>['BIO',x.c],stype:'alpha'},
       {id:'en-ey-nf', label:'Early Years Nonfiction', preview:'EY / 523.3 / PAR', rawSrc:EN_NF,rawFn:x=>['EY',x.c,x.n],stype:'dewey'},
       {id:'en-pla-nf',label:'Playaway Nonfiction',    preview:'PLA / 523.3 / PAR',rawSrc:EN_NF,rawFn:x=>['PLA',x.c,x.n],stype:'dewey'},
@@ -2708,7 +2708,7 @@ const ACADEMIES = {
       {name:'Legend',     num:8, diff:'hard',   desc:'8 books, very similar decimals'},
     ],
     rawSrc: null,
-    rawFn: x=>[x.c,x.n],
+    rawFn: x=>[x.n,x.c],
   },
 };
 
