@@ -1930,8 +1930,15 @@ function attachDragHandlers(el, i, cfg){
     e.preventDefault(); e.stopPropagation();
     el.classList.remove('drag-target');
     if(dragSrcRef.val===null||dragSrcRef.val===i)return;
-    const rect=el.getBoundingClientRect();
-    const dst=e.clientX<rect.left+rect.width/2?i:(i+1>booksArr.length?booksArr.length:i);
+    const shelfEl=document.querySelector(shelfSelector);
+    const sr=shelfEl?shelfEl.getBoundingClientRect():null;
+    let dst;
+    if(sr&&e.clientX<sr.left+60){
+      dst=0;
+    } else {
+      const rect=el.getBoundingClientRect();
+      dst=e.clientX<rect.left+rect.width/2?i:(i+1>booksArr.length?booksArr.length:i);
+    }
     const src=dragSrcRef.val; dragSrcRef.val=null;
     onMove(src, dst);
   });
@@ -1970,6 +1977,12 @@ function attachDragHandlers(el, i, cfg){
     dragSrcRef.val=null;
     if(!wasDrag)return;
     const shelfEl=document.querySelector(shelfSelector);
+    const sr=shelfEl.getBoundingClientRect();
+    // Snap to first position when dragged to the left edge of the shelf
+    if(t.clientX<sr.left+60&&t.clientY>=sr.top&&t.clientY<=sr.bottom){
+      onMove(i, 0);
+      return;
+    }
     const under=document.elementFromPoint(t.clientX,t.clientY);
     const tgt=under?under.closest(shelfSelector+' .book'):null;
     if(tgt&&tgt!==el){
@@ -1981,7 +1994,6 @@ function attachDragHandlers(el, i, cfg){
         onMove(i, i<ad?ad-1:ad);
       }
     } else {
-      const sr=shelfEl.getBoundingClientRect();
       if(t.clientX>=sr.left&&t.clientX<=sr.right&&t.clientY>=sr.top&&t.clientY<=sr.bottom){
         const els=Array.from(shelfEl.querySelectorAll('.book'));
         let idx=booksArr.length;
