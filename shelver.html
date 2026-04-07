@@ -14,6 +14,11 @@
   --red:#DC2626;--red-bg:#FEE2E2;--shadow:rgba(0,0,0,0.10);
   --card-bg:#FFFFFF;--card-border:#E5E1D8;
   --card-shadow:0 2px 12px rgba(0,0,0,0.08),0 1px 3px rgba(0,0,0,0.06);
+  --amber:#D97706;--amber-bg:#FEF3C7;
+  --wood-mid:#8B6340;
+  --fun-purple:#7C3AED;--fun-pink:#EC4899;
+  --ink-soft:#4B5563;
+  --cream:#FDFAF6;
 }
 [data-theme="dark"]{
   --ink:#F5F3EF;--ink-muted:#9CA3AF;--ink-light:#6B7280;
@@ -22,12 +27,18 @@
   --red:#F87171;--red-bg:#7F1D1D;--shadow:rgba(0,0,0,0.4);
   --card-bg:#1E1C19;--card-border:#2E2B27;
   --card-shadow:0 2px 12px rgba(0,0,0,0.3),0 1px 3px rgba(0,0,0,0.2);
+  --amber:#FBBF24;--amber-bg:#451A03;
+  --wood-mid:#A07850;
+  --fun-purple:#A78BFA;--fun-pink:#F472B6;
+  --ink-soft:#9CA3AF;
+  --cream:#1A1714;
 }
 body{
   font-family:DM Sans,sans-serif;
   background:var(--bg);
   color:var(--ink);
   min-height:100vh;
+  transition:background 0.3s ease,color 0.3s ease;
   background-image:
     radial-gradient(circle at 15% 20%, rgba(124,58,237,0.06) 0%, transparent 40%),
     radial-gradient(circle at 85% 80%, rgba(236,72,153,0.06) 0%, transparent 40%),
@@ -177,7 +188,11 @@ height:360px;overflow:hidden;
   pointer-events:none;
 }
 .shelf-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.5);margin-bottom:10px;position:relative;display:none;}
-.shelf-books{display:flex;gap:3px;align-items:flex-end;flex:1;overflow:hidden;padding:0 6px;padding:0 0 20px 0;min-height:0;box-sizing:border-box;}
+.shelf-dir-row{display:flex;align-items:center;gap:6px;padding:0 10px 6px;position:relative;z-index:2;}
+.shelf-dir-label{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);white-space:nowrap;}
+.shelf-dir-arrow{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.2),rgba(255,255,255,0.45),rgba(255,255,255,0.2));position:relative;}
+.shelf-dir-arrow::after{content:'▶';position:absolute;right:-5px;top:50%;transform:translateY(-50%);font-size:7px;color:rgba(255,255,255,0.45);line-height:1;}
+.shelf-books{display:flex;gap:3px;align-items:flex-end;flex:1;overflow:hidden;padding:0 0 20px 0;min-height:0;box-sizing:border-box;}
 /* shelf surface */
 
 
@@ -273,6 +288,11 @@ align-self:flex-end;overflow:hidden;}
 }
 .cbtn:hover{background:#16A34A;}
 .cbtn:active{transform:translateY(1px);box-shadow:0 1px 0 #166534;}
+.cbtn-amber{
+  background:var(--amber)!important;
+  box-shadow:0 2px 0 #92400E,0 3px 8px rgba(217,119,6,0.25)!important;
+}
+.cbtn-amber:hover{background:#B45309!important;}
 .abtn{
   flex:1;padding:11px;font-size:12px;font-family:DM Sans,sans-serif;font-weight:500;
   background:white;border:1.5px solid var(--border);border-radius:10px;
@@ -280,6 +300,17 @@ align-self:flex-end;overflow:hidden;}
 }
 .abtn:hover{background:#F5F4F0;border-color:var(--ink-muted);}
 .abtn:disabled{opacity:0.3;cursor:default;}
+/* Study mode banner */
+.study-banner{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:linear-gradient(135deg,var(--amber-bg),#FDE68A);
+  border:2px solid var(--amber);border-radius:12px;
+  padding:10px 16px;margin-bottom:0.85rem;text-align:center;
+}
+.study-banner-label{font-size:14px;font-weight:700;color:#78350F;}
+.study-banner-sub{font-size:12px;color:#92400E;opacity:0.8;}
+[data-theme="dark"] .study-banner-label{color:#FDE68A;}
+[data-theme="dark"] .study-banner-sub{color:#FCD34D;}
 
 /* ── PILLS ── */
 .pills{display:flex;gap:6px;flex-wrap:wrap;}
@@ -311,25 +342,6 @@ align-self:flex-end;overflow:hidden;}
 /* Academy game screen */
 .acad-screen{display:none;min-height:100vh;overflow:hidden;}
 .acad-screen.active{display:flex;flex-direction:column;}
-.acad-wrap{max-width:740px;margin:0 auto;padding:0.75rem 1rem 1rem;width:100%;}
-.acad-layout{max-width:860px;margin:0 auto;display:flex;gap:10px;padding:0.75rem 0.75rem 1rem;width:100%;align-items:flex-start;box-sizing:border-box;}
-.acad-sidebar{display:flex;flex-direction:column;gap:6px;width:86px;flex-shrink:0;}
-.acad-sidebar .cat-badge{font-size:10px;padding:5px 6px;text-align:center;border-radius:10px;margin-bottom:0;line-height:1.3;justify-content:center;word-break:break-word;}
-.acad-sidebar .tb{width:100%;padding:9px 4px;font-size:11px;text-align:center;border-radius:9px;line-height:1.3;}
-.acad-main{flex:1;min-width:0;display:flex;flex-direction:column;}
-@media(max-width:500px){
-  .acad-layout{flex-direction:column;gap:6px;}
-  .acad-sidebar{flex-direction:row;width:100%;flex-wrap:wrap;}
-  .acad-sidebar .cat-badge{flex:0 0 auto;}
-  .acad-sidebar .tb{flex:1;}
-}
-
-/* Progress header */
-.acad-hdr{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
-.acad-back{background:none;border:none;font-size:13px;color:var(--ink-muted);cursor:pointer;font-family:DM Sans,sans-serif;text-decoration:underline;white-space:nowrap;}
-.acad-back:hover{color:var(--ink);}
-.acad-title{font-family:Lora,serif;font-size:18px;font-weight:600;color:var(--ink);}
-.acad-stage-label{font-size:12px;color:var(--ink-muted);margin-top:1px;}
 
 /* Stage progress bar */
 .stage-progress{background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:2px solid #C4B5FD;border-radius:16px;padding:8px 14px;margin-bottom:0.5rem;box-shadow:0 2px 8px rgba(124,58,237,0.1);}
@@ -562,14 +574,42 @@ align-self:flex-end;overflow:hidden;}
 .mute-btn{bottom:14px;right:14px;}
 
 
-.ro-icon{font-size:72px;margin-bottom:0.75rem;}
-.ro-heading{font-family:'Lora',serif;font-size:38px;font-weight:600;color:white;margin-bottom:0.5rem;line-height:1.1;}
-.ro-body{font-size:17px;color:rgba(255,255,255,0.85);max-width:420px;line-height:1.55;margin-bottom:0.5rem;font-weight:500;}
-.ro-order{font-size:14px;color:rgba(255,255,255,0.65);max-width:420px;line-height:1.5;}
-.ro-streak{font-size:15px;font-weight:700;color:rgba(255,255,255,0.6);margin-top:1.25rem;letter-spacing:0.05em;}
-.ro-progress{display:flex;gap:10px;justify-content:center;margin-top:1rem;}
+/* ── Result bottom sheet ── */
+#result-overlay{
+  display:none;position:fixed;inset:0;z-index:8000;
+  background:rgba(0,0,0,0);
+  transition:background 0.3s ease;
+  pointer-events:none;
+}
+#result-overlay.visible{
+  display:block;background:rgba(0,0,0,0.45);pointer-events:all;
+}
+.ro-sheet{
+  position:absolute;bottom:0;left:0;right:0;
+  border-radius:20px 20px 0 0;
+  padding:1rem 1.5rem 2rem;
+  transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(.34,1.1,.64,1);
+  max-width:600px;margin:0 auto;
+}
+#result-overlay.visible .ro-sheet{transform:translateY(0);}
+.ro-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,0.35);margin:0 auto 1rem;}
+.ro-top{display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;}
+.ro-icon{font-size:44px;line-height:1;flex-shrink:0;}
+.ro-heading{font-family:'Lora',serif;font-size:24px;font-weight:600;color:white;line-height:1.1;margin-bottom:4px;}
+.ro-body{font-size:15px;color:rgba(255,255,255,0.88);line-height:1.5;font-weight:500;}
+.ro-order{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:0.75rem;word-break:break-word;}
+.ro-progress{display:flex;gap:10px;margin-bottom:0.75rem;}
 .ro-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.15);}
 .ro-dot.filled{background:#FBBF24;border-color:#FBBF24;box-shadow:0 0 8px rgba(251,191,36,0.5);}
+.ro-streak{font-size:13px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:1.25rem;letter-spacing:0.03em;}
+.ro-next-btn{
+  width:100%;padding:13px;font-size:16px;font-family:'DM Sans',sans-serif;font-weight:700;
+  background:rgba(255,255,255,0.18);color:white;
+  border:2px solid rgba(255,255,255,0.35);border-radius:14px;cursor:pointer;
+  transition:background 0.15s;
+}
+.ro-next-btn:hover{background:rgba(255,255,255,0.28);}
 
 /* ── HOME SCREEN ── */
 .home-screen{display:none;min-height:100vh;background:var(--bg);overflow-y:auto;flex-direction:column;align-items:center;}
@@ -845,70 +885,86 @@ window.addEventListener('unhandledrejection', function(e) {
 </div>
 
 <div class="acad-screen" id="screen-acad" style="display:none;">
-<div class="acad-layout">
+<div class="game-wrap">
 
-  <!-- Sidebar: category + action buttons -->
-  <div class="acad-sidebar">
-    <div class="cat-badge"><span id="acad-cat-label">Fiction (F)</span></div>
-    <button class="tb" id="acad-hint-btn">Hint (3)</button>
-    <button class="tb" id="acad-undo-btn" disabled>Undo</button>
-    <button class="tb" id="acad-new-shelf-btn" title="Get a new set of books without losing your streak">🔀 New Shelf</button>
-    <button class="tb" id="acad-restart-btn" title="Start this academy from the beginning" style="font-size:10px;opacity:0.6;margin-top:4px;">↩ Start Over</button>
-    <button id="acad-cheat-btn" onclick="acadCheatWin()" style="margin-top:auto;background:none;border:none;cursor:pointer;opacity:0.08;font-size:18px;padding:8px 0;width:100%;text-align:center;" title="">···</button>
-  </div>
-
-  <!-- Main content -->
-  <div class="acad-main">
-    <div class="acad-hdr">
-      <button class="acad-back" id="acad-back-btn">← Home</button>
-      <div>
-        <div class="acad-title" id="acad-title">Fiction Academy</div>
-        <div class="acad-stage-label" id="acad-stage-label">Stage 1 — Novice</div>
-      </div>
+  <div class="ghdr">
+    <div class="gtitle-wrap">
+      <div class="gtitle" id="acad-title">Fiction Academy</div>
+      <div class="gsub" id="acad-stage-label">Stage 1 — Novice</div>
     </div>
-
-    <div class="stage-progress">
-      <div class="stage-row">
-        <div class="stage-name" id="acad-stage-name">Warm Up</div>
-        <div class="stage-num" id="acad-stage-num">Stage 1 of 4</div>
-        <div id="acad-best-display" style="font-size:11px;color:var(--ink-muted);font-weight:600;margin-right:8px;"></div>
-        <div class="streak-dots" id="streak-dots">
-          <div class="sdot" id="sd0"></div>
-          <div class="sdot" id="sd1"></div>
-          <div class="sdot" id="sd2"></div>
-        </div>
-      </div>
-      <div class="stage-steps" id="stage-steps"></div>
-    </div>
-
-    <div class="lives-row" id="acad-lives">
-      <span class="lives-label">Lives</span>
-      <span class="life" id="life-0">❤️</span>
-      <span class="life" id="life-1">❤️</span>
-      <span class="life" id="life-2">❤️</span>
-    </div>
-    <div class="alpha-bar">A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z</div>
-    <div class="result-panel" id="acad-result-panel">
-      <div class="rp-top">
-        <div class="rp-icon" id="acad-rp-icon">✓</div>
-        <div class="rp-heading" id="acad-rp-heading">Well done!</div>
-        <div class="rp-score" id="acad-rp-score"></div>
-      </div>
-      <div class="rp-body" id="acad-rp-body"></div>
-      <div class="rp-order" id="acad-rp-order"></div>
-    </div>
-    <div class="cw" id="acad-cw"></div>
-
-    <div class="shelf-outer diff-medium" id="acad-shelf-outer">
-      <div class="shelf-lbl" id="acad-shelf-lbl">Drag books to reorder · tap two books to swap</div>
-      <div class="shelf-books" id="acad-shelf"></div>
-    </div>
-
-    <div class="brow">
-      <button class="cbtn" id="acad-check-btn">Check my shelf</button>
-      <button class="abtn" id="acad-reveal-btn" style="display:none;">Show answer</button>
+    <div class="hdr-btns">
+      <button class="tb" id="acad-back-btn">← Home</button>
+      <button class="tb" id="acad-new-shelf-btn" title="Get a new set of books without losing your streak">🔀 New Shelf</button>
     </div>
   </div>
+
+  <div class="cat-badge"><span id="acad-cat-label">Fiction (F)</span></div>
+
+  <div class="stage-progress">
+    <div class="stage-row">
+      <div class="stage-name" id="acad-stage-name">Novice</div>
+      <div class="stage-num" id="acad-stage-num">Stage 1 of 4</div>
+      <div id="acad-best-display" style="font-size:11px;color:var(--ink-muted);font-weight:600;margin-right:8px;"></div>
+      <div class="streak-dots" id="streak-dots">
+        <div class="sdot" id="sd0"></div>
+        <div class="sdot" id="sd1"></div>
+        <div class="sdot" id="sd2"></div>
+      </div>
+    </div>
+    <div class="stage-steps" id="stage-steps"></div>
+  </div>
+
+  <div class="lives-row" id="acad-lives">
+    <span class="lives-label">Lives</span>
+    <span class="life" id="life-0">❤️</span>
+    <span class="life" id="life-1">❤️</span>
+    <span class="life" id="life-2">❤️</span>
+  </div>
+
+  <div class="alpha-bar" id="shelf-alphabet-acad">A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z</div>
+
+  <div class="result-panel" id="acad-result-panel">
+    <div class="rp-top">
+      <div class="rp-icon" id="acad-rp-icon">✓</div>
+      <div class="rp-heading" id="acad-rp-heading">Well done!</div>
+      <div class="rp-score" id="acad-rp-score"></div>
+    </div>
+    <div class="rp-body" id="acad-rp-body"></div>
+    <div class="rp-order" id="acad-rp-order"></div>
+  </div>
+  <div class="cw" id="acad-cw"></div>
+
+  <div class="shelf-outer diff-easy" id="acad-shelf-outer">
+    <div class="shelf-lbl" id="acad-shelf-lbl">Drag books to reorder · tap two books to swap</div>
+    <div class="shelf-dir-row">
+      <span class="shelf-dir-label">FIRST</span>
+      <span class="shelf-dir-arrow">→</span>
+      <span class="shelf-dir-label">LAST</span>
+    </div>
+    <div class="shelf-books" id="acad-shelf"></div>
+  </div>
+
+  <div class="study-banner" id="acad-study-banner" style="display:none;">
+    <span class="study-banner-label">👁 Study the correct order</span>
+    <span class="study-banner-sub">When you're ready, tap Try Again</span>
+  </div>
+
+  <div class="brow" id="acad-brow-check">
+    <button class="cbtn" id="acad-check-btn">Check my shelf</button>
+    <button class="abtn" id="acad-hint-btn">Hint (3)</button>
+    <button class="abtn" id="acad-undo-btn" disabled>Undo</button>
+    <button class="abtn" id="acad-reveal-btn" style="display:none;">Show answer</button>
+  </div>
+
+  <div class="brow" id="acad-brow-study" style="display:none;">
+    <button class="cbtn cbtn-amber" id="acad-try-again-btn">↺ Try Again</button>
+  </div>
+
+  <div style="text-align:center;margin-top:0.5rem;">
+    <button class="tb" id="acad-restart-btn" title="Start this academy from the beginning" style="font-size:11px;opacity:0.5;">↩ Start Over</button>
+  </div>
+
+  <button id="acad-cheat-btn" onclick="acadCheatWin()" style="display:block;margin:0 auto;background:none;border:none;cursor:pointer;opacity:0.08;font-size:18px;padding:8px 0;width:60px;text-align:center;" title="">···</button>
 
 </div>
 </div>
@@ -1003,13 +1059,14 @@ window.addEventListener('unhandledrejection', function(e) {
       <div class="gsub" id="shelf-lbl">Put the books in call number order</div>
     </div>
     <div class="hdr-btns">
+      <button class="tb" id="settings-btn">⚙ Settings</button>
       <button class="tb" id="new-btn">New game</button>
     </div>
   </div>
 
   <div class="cat-badge"><span id="cat-badge-label">Fiction</span><span class="chg" onclick="goTo('lang')">change</span></div>
 
-  <div class="ctrls">
+  <div class="ctrls" id="game-ctrls" style="display:none;">
     <div class="cg" id="diff-tog">
       <button class="sb on" data-diff="easy">Easy</button>
       <button class="sb" data-diff="medium">Medium</button>
@@ -1042,6 +1099,11 @@ window.addEventListener('unhandledrejection', function(e) {
 
   <div class="shelf-outer diff-medium" id="game-shelf-outer">
     <div class="shelf-lbl" id="game-shelf-lbl">Drag books to reorder · tap two books to swap</div>
+    <div class="shelf-dir-row">
+      <span class="shelf-dir-label">FIRST</span>
+      <span class="shelf-dir-arrow">→</span>
+      <span class="shelf-dir-label">LAST</span>
+    </div>
     <div class="shelf-books" id="shelf"></div>
   </div>
 
@@ -1664,8 +1726,7 @@ const NAV=[
 
 let currentCat=null;
 let level=3,bigMode=false,timerOn=false,showAlpha=false;
-let books=[],history=[],dragSrc=null,tapSel=null;
-let touchDragSrc=null,touchDragClone=null,touchOX=0,touchOY=0,touchStartX=0,touchStartY=0;
+let books=[],history=[],tapSel=null;
 let state='idle',hints=3,moves=0,streak=0,score=0,best=0;
 let timerSec=30,timerMax=30,timerIv=null,checks=0,difficulty='easy';
 
@@ -1754,12 +1815,134 @@ function launchGame(cat){
   newGame();
 }
 
-// ── Sort helpers ──────────────────────────────────────────────────────────
+// ── Shared shelf engine ───────────────────────────────────────────────────
 function sortedB(arr){return[...arr].sort((a,b)=>a.sv<b.sv?-1:a.sv>b.sv?1:0);}
 function isSorted(arr){for(let i=0;i<arr.length-1;i++)if(arr[i].sv>arr[i+1].sv)return false;return true;}
-function correctness(){const s=sortedB(books);return books.map((b,i)=>b.sv===s[i].sv&&b.lines.join('|')===s[i].lines.join('|'));}
+function calcCorrectness(booksArr){const s=sortedB(booksArr);return booksArr.map((b,i)=>b.sv===s[i].sv&&b.lines.join('|')===s[i].lines.join('|'));}
+function correctness(){return calcCorrectness(books);}
 function isDewey(){return currentCat&&currentCat.stype==='dewey';}
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]];}return r;}
+
+// buildBookEl — shared book DOM builder used by both render() and acadRender()
+// cfg: { booksArr, tapSel, bigMode, shelfSelector, onMove, onTap, dragSrcRef }
+// dragSrcRef is an object { val: null } so the closure can read/write it by reference
+function buildBookEl(b, i, cfg){
+  const col=SC[b.colorIdx%SC.length];
+  const extra=cfg.bigMode?18:0;
+  const w=WIDTHS[b.colorIdx%WIDTHS.length]+extra;
+  const h=getBookHeight(b.colorIdx, cfg.shelfSelector)+extra;
+  const el=document.createElement('div');
+  el.className='book';
+  el.draggable=true;
+  el.style.cssText='width:'+w+'px;height:'+h+'px;';
+  if(cfg.tapSel===i) el.classList.add('tapped');
+  const stc=b.correct===null?'':(b.correct?'ok':'bad');
+  const lbl=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
+  el.innerHTML='<div class="bst '+stc+'"></div>'
+    +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:2px 2px 1px 1px;overflow:visible;">'
+    +'<div class="b-spine-top"></div>'
+    +'<div class="b-spine-edge"></div>'
+    +'<div class="b-spine-grip"></div>'
+    +'<div style="position:absolute;top:7px;left:50%;transform:translateX(-50%);background:'+col.lt+';color:'+col.fg+';font-size:7px;font-weight:700;font-family:DM Sans,sans-serif;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);white-space:nowrap;max-width:'+(w-8)+'px;overflow:hidden;text-overflow:ellipsis;z-index:3;">'+b.author+'</div>'
+    +((/[\u4e00-\u9fff\uac00-\ud7af]/.test(b.title))
+      ?'<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 3px 50px;"><div style="writing-mode:vertical-rl;transform:none;font-family:DM Sans,sans-serif;font-size:'+(w<55?'13':w<68?'16':'20')+'px;font-weight:700;color:'+col.fg+';letter-spacing:0.08em;text-shadow:0 1px 2px rgba(0,0,0,0.3);">'+b.title+'</div></div>'
+      :'<div style="flex:1;padding-bottom:54px;">'+SPINE_STYLES[b.colorIdx%SPINE_STYLES.length](b.title,col.fg,w,h)+'</div>')
+    +'<div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:#FAFAF8;color:#1a1a1a;border:none;border-radius:3px;width:'+(w-10)+'px;padding:5px 2px 6px;font-size:12px;font-weight:800;font-family:Courier New,Courier,monospace;text-align:center;line-height:1.45;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.3);z-index:2;">'+lbl+'</div>'
+    +'</div>';
+  attachDragHandlers(el, i, cfg);
+  return el;
+}
+
+function attachDragHandlers(el, i, cfg){
+  const {booksArr, dragSrcRef, shelfSelector, onMove, onTap} = cfg;
+  let touchDragClone=null, touchOX=0, touchOY=0, touchStartX=0, touchStartY=0;
+
+  el.addEventListener('dragstart', e=>{
+    dragSrcRef.val=i;
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain',String(i));
+    const clone=el.cloneNode(true);
+    clone.style.cssText='position:fixed;top:-1000px;left:-1000px;width:'+el.offsetWidth+'px;transform:rotate(-3deg) scale(1.06);opacity:0.95;border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);pointer-events:none;';
+    document.body.appendChild(clone);
+    e.dataTransfer.setDragImage(clone,el.offsetWidth/2,el.offsetHeight/2);
+    setTimeout(()=>document.body.removeChild(clone),0);
+    requestAnimationFrame(()=>el.classList.add('dragging'));
+  });
+  el.addEventListener('dragend',()=>{
+    dragSrcRef.val=null;
+    document.querySelectorAll(shelfSelector+' .book.dragging,'+shelfSelector+' .book.drag-target').forEach(x=>{x.classList.remove('dragging','drag-target');});
+  });
+  el.addEventListener('dragover',e=>{
+    e.preventDefault(); e.stopPropagation();
+    document.querySelectorAll(shelfSelector+' .book.drag-target').forEach(x=>x.classList.remove('drag-target'));
+    if(dragSrcRef.val!==null&&dragSrcRef.val!==i) el.classList.add('drag-target');
+  });
+  el.addEventListener('dragleave',()=>el.classList.remove('drag-target'));
+  el.addEventListener('drop',e=>{
+    e.preventDefault(); e.stopPropagation();
+    el.classList.remove('drag-target');
+    if(dragSrcRef.val===null||dragSrcRef.val===i)return;
+    const rect=el.getBoundingClientRect();
+    const dst=e.clientX<rect.left+rect.width/2?i:(i+1>booksArr.length?booksArr.length:i);
+    const src=dragSrcRef.val; dragSrcRef.val=null;
+    onMove(src, dst);
+  });
+  el.addEventListener('click',()=>onTap(i));
+
+  el.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1)return;
+    const t=e.touches[0];
+    const r=el.getBoundingClientRect();
+    touchOX=t.clientX-r.left; touchOY=t.clientY-r.top;
+    touchStartX=t.clientX; touchStartY=t.clientY;
+    touchDragClone=null;
+    dragSrcRef.val=i;
+  },{passive:true});
+  el.addEventListener('touchmove',function(e){
+    if(dragSrcRef.val!==i)return;
+    const t=e.touches[0];
+    if(!touchDragClone){
+      const dx=t.clientX-touchStartX, dy=t.clientY-touchStartY;
+      if(Math.sqrt(dx*dx+dy*dy)<8)return;
+      touchDragClone=el.cloneNode(true);
+      touchDragClone.style.cssText='position:fixed;left:'+(t.clientX-touchOX)+'px;top:'+(t.clientY-touchOY)+'px;width:'+el.offsetWidth+'px;height:'+el.offsetHeight+'px;opacity:0.88;pointer-events:none;z-index:9999;transform:rotate(-3deg) scale(1.05);border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);';
+      document.body.appendChild(touchDragClone);
+      el.classList.add('dragging');
+    }
+    touchDragClone.style.left=(t.clientX-touchOX)+'px';
+    touchDragClone.style.top=(t.clientY-touchOY)+'px';
+    e.preventDefault();
+  },{passive:false});
+  el.addEventListener('touchend',function(e){
+    if(dragSrcRef.val!==i)return;
+    const t=e.changedTouches[0];
+    const wasDrag=!!touchDragClone;
+    if(touchDragClone){touchDragClone.remove();touchDragClone=null;}
+    el.classList.remove('dragging');
+    dragSrcRef.val=null;
+    if(!wasDrag)return;
+    const shelfEl=document.querySelector(shelfSelector);
+    const under=document.elementFromPoint(t.clientX,t.clientY);
+    const tgt=under?under.closest(shelfSelector+' .book'):null;
+    if(tgt&&tgt!==el){
+      const bookEls=Array.from(shelfEl.querySelectorAll('.book'));
+      const dst=bookEls.indexOf(tgt);
+      if(dst!==-1){
+        const rect=tgt.getBoundingClientRect();
+        const ad=t.clientX<rect.left+rect.width/2?dst:(dst+1>booksArr.length?booksArr.length:dst);
+        onMove(i, i<ad?ad-1:ad);
+      }
+    } else {
+      const sr=shelfEl.getBoundingClientRect();
+      if(t.clientX>=sr.left&&t.clientX<=sr.right&&t.clientY>=sr.top&&t.clientY<=sr.bottom){
+        const els=Array.from(shelfEl.querySelectorAll('.book'));
+        let idx=booksArr.length;
+        for(let j=0;j<els.length;j++){const r=els[j].getBoundingClientRect();if(t.clientX<r.left+r.width/2){idx=j;break;}}
+        onMove(i, idx);
+      }
+    }
+  },{passive:true});
+}
 
 // ── Seeded RNG (mulberry32) ───────────────────────────────────────────────
 function seededRNG(seed){
@@ -1864,139 +2047,41 @@ function spineFs(title, w, basePx){
   return fs;
 }
 
+const _gameDragSrc={val:null};
 function render(){
-  const shelf=document.getElementById('shelf');shelf.innerHTML='';
-  books.forEach((b,i)=>{
-    const col=SC[b.colorIdx%SC.length];
-    const w=WIDTHS[b.colorIdx%WIDTHS.length]+(bigMode?18:0);
-    const h=getBookHeight(b.colorIdx,'shelf')+(bigMode?20:0);
-    const el=document.createElement('div');
-    el.className='book';el.draggable=true;
-    el.style.cssText='width:'+w+'px;height:'+h+'px;';
-    if(tapSel===i)el.classList.add('tapped');
-    const stc=b.correct===null?'':(b.correct?'ok':'bad');
-    const lbl=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
-    el.innerHTML='<div class="bst '+stc+'"></div>'
-      +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:2px 2px 1px 1px;overflow:visible;">'
-      +'<div class="b-spine-top"></div>'
-      +'<div class="b-spine-edge"></div>'
-      +'<div class="b-spine-grip"></div>'
-      +'<div style="position:absolute;top:7px;left:50%;transform:translateX(-50%);background:'+col.lt+';color:'+col.fg+';font-size:7px;font-weight:700;font-family:DM Sans,sans-serif;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);white-space:nowrap;max-width:'+(w-8)+'px;overflow:hidden;text-overflow:ellipsis;z-index:3;">'+b.author+'</div>'
-      +((/[\u4e00-\u9fff\uac00-\ud7af]/.test(b.title))
-        ?'<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 3px 50px;"><div style="writing-mode:vertical-rl;transform:none;font-family:DM Sans,sans-serif;font-size:'+(w<55?'13':w<68?'16':'20')+'px;font-weight:700;color:'+col.fg+';letter-spacing:0.08em;text-shadow:0 1px 2px rgba(0,0,0,0.3);">'+b.title+'</div></div>'
-        :'<div style="flex:1;padding-bottom:54px;">'+SPINE_STYLES[b.colorIdx%SPINE_STYLES.length](b.title,col.fg,w,h)+'</div>')
-      +'<div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:#FAFAF8;color:#1a1a1a;border:none;border-radius:3px;width:'+(w-10)+'px;padding:5px 2px 6px;font-size:12px;font-weight:800;font-family:Courier New,Courier,monospace;text-align:center;line-height:1.45;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.3);z-index:2;">'+lbl+'</div>'
-      +'</div>';
-    el.addEventListener('dragstart',e=>{
-      dragSrc=i;
-      e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('text/plain',String(i));
-      // Custom drag image — tilted clone
-      const clone=el.cloneNode(true);
-      clone.style.cssText='position:fixed;top:-1000px;left:-1000px;width:'+el.offsetWidth+'px;transform:rotate(-3deg) scale(1.06);opacity:0.95;border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);pointer-events:none;';
-      document.body.appendChild(clone);
-      e.dataTransfer.setDragImage(clone,el.offsetWidth/2,el.offsetHeight/2);
-      setTimeout(()=>{document.body.removeChild(clone);},0);
-      requestAnimationFrame(()=>el.classList.add('dragging'));
-    });
-    el.addEventListener('dragend',()=>{dragSrc=null;document.querySelectorAll('.book.dragging,.book.drag-target').forEach(x=>{x.classList.remove('dragging');x.classList.remove('drag-target');});});
-    el.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();document.querySelectorAll('.book.drag-target').forEach(x=>x.classList.remove('drag-target'));if(dragSrc!==null&&dragSrc!==i)el.classList.add('drag-target');});
-    el.addEventListener('dragleave',()=>el.classList.remove('drag-target'));
-    el.addEventListener('drop',e=>{
-      e.preventDefault();e.stopPropagation();
-      el.classList.remove('drag-target');
-      if(dragSrc===null||dragSrc===i)return;
-      // Determine if dropping on left or right half of target book
-      const rect=el.getBoundingClientRect();
-      const dropLeft=e.clientX<rect.left+rect.width/2;
-      const dst=dropLeft?i:(i+1>books.length?books.length:i);
-      const src=dragSrc;
-      dragSrc=null;
+  const shelf=document.getElementById('shelf');
+  shelf.innerHTML='';
+  const cfg={
+    booksArr:books,
+    tapSel,
+    bigMode,
+    shelfSelector:'#shelf',
+    dragSrcRef:_gameDragSrc,
+    onMove(src,dst){
       saveHist();
       const m=books.splice(src,1)[0];
-      const adjustedDst=src<dst?dst-1:dst;
-      books.splice(adjustedDst,0,m);
+      books.splice(src<dst?dst-1:dst,0,m);
       afterMove();
-    });
-    el.addEventListener('click',()=>handleTap(i));
-    el.addEventListener('touchstart',function(e){
-      if(e.touches.length!==1)return;
-      const t=e.touches[0];
-      touchDragSrc=i;
-      const r=el.getBoundingClientRect();
-      touchOX=t.clientX-r.left;touchOY=t.clientY-r.top;
-      touchStartX=t.clientX;touchStartY=t.clientY;
-      touchDragClone=null;
-    },{passive:true});
-    el.addEventListener('touchmove',function(e){
-      if(touchDragSrc!==i)return;
-      const t=e.touches[0];
-      if(!touchDragClone){
-        const dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;
-        if(Math.sqrt(dx*dx+dy*dy)<8)return;
-        touchDragClone=el.cloneNode(true);
-        touchDragClone.style.cssText='position:fixed;left:'+(t.clientX-touchOX)+'px;top:'+(t.clientY-touchOY)+'px;width:'+el.offsetWidth+'px;height:'+el.offsetHeight+'px;opacity:0.88;pointer-events:none;z-index:9999;transform:rotate(-3deg) scale(1.05);border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);';
-        document.body.appendChild(touchDragClone);
-        el.classList.add('dragging');
-      }
-      touchDragClone.style.left=(t.clientX-touchOX)+'px';
-      touchDragClone.style.top=(t.clientY-touchOY)+'px';
-      e.preventDefault();
-    },{passive:false});
-    el.addEventListener('touchend',function(e){
-      if(touchDragSrc!==i)return;
-      const t=e.changedTouches[0];
-      const wasDrag=!!touchDragClone;
-      if(touchDragClone){touchDragClone.remove();touchDragClone=null;}
-      el.classList.remove('dragging');
-      touchDragSrc=null;
-      if(!wasDrag)return;
-      const under=document.elementFromPoint(t.clientX,t.clientY);
-      const tgt=under?under.closest('#shelf .book'):null;
-      if(tgt&&tgt!==el){
-        const bookEls=Array.from(document.querySelectorAll('#shelf .book'));
-        const dst=bookEls.indexOf(tgt);
-        if(dst!==-1){
-          const rect=tgt.getBoundingClientRect();
-          saveHist();
-          const m=books.splice(i,1)[0];
-          const ad=t.clientX<rect.left+rect.width/2?dst:(dst+1>books.length?books.length:dst);
-          books.splice(i<ad?ad-1:ad,0,m);
-          afterMove();
-        }
-      } else {
-        const shelfEl=document.getElementById('shelf');
-        const sr=shelfEl.getBoundingClientRect();
-        if(t.clientX>=sr.left&&t.clientX<=sr.right&&t.clientY>=sr.top&&t.clientY<=sr.bottom){
-          saveHist();
-          const m=books.splice(i,1)[0];
-          const els=Array.from(shelfEl.querySelectorAll('.book'));
-          let idx=books.length;
-          for(let j=0;j<els.length;j++){const r=els[j].getBoundingClientRect();if(t.clientX<r.left+r.width/2){idx=j;break;}}
-          books.splice(idx,0,m);
-          afterMove();
-        }
-      }
-    },{passive:true});
+    },
+    onTap(i){handleTap(i);},
+  };
+  books.forEach((b,i)=>{
+    const el=buildBookEl(b,i,cfg);
+    el.classList.add('dropping');
+    el.style.animationDelay=(i*60)+'ms';
     shelf.appendChild(el);
   });
   shelf.ondragover=e=>{e.preventDefault();e.dataTransfer.dropEffect='move';};
   shelf.ondrop=e=>{
     e.preventDefault();
-    if(dragSrc===null)return;
-    // Only fire if dropped directly on shelf bg (not on a book)
-    if(e.target!==shelf)return;
+    if(_gameDragSrc.val===null||e.target!==shelf)return;
     saveHist();
-    const m=books.splice(dragSrc,1)[0];
-    // Insert at correct position based on drop X coordinate
+    const m=books.splice(_gameDragSrc.val,1)[0];
     const els=Array.from(shelf.querySelectorAll('.book'));
-    let insertIdx=books.length; // default: end
-    for(let i=0;i<els.length;i++){
-      const rect=els[i].getBoundingClientRect();
-      if(e.clientX<rect.left+rect.width/2){insertIdx=i;break;}
-    }
-    books.splice(insertIdx,0,m);
-    dragSrc=null;afterMove();
+    let idx=books.length;
+    for(let i=0;i<els.length;i++){const r=els[i].getBoundingClientRect();if(e.clientX<r.left+r.width/2){idx=i;break;}}
+    books.splice(idx,0,m);
+    _gameDragSrc.val=null;afterMove();
   };
 }
 
@@ -2137,6 +2222,13 @@ function confetti(){
 // ── Wire controls ─────────────────────────────────────────────────────────
 document.getElementById('check-btn').addEventListener('click',checkOrder);
 document.getElementById('new-btn').addEventListener('click',newGame);
+document.getElementById('settings-btn').addEventListener('click',function(){
+  var ctrls=document.getElementById('game-ctrls');
+  var open=ctrls.style.display==='none';
+  ctrls.style.display=open?'flex':'none';
+  this.classList.toggle('active-toggle',open);
+  this.textContent=open?'⚙ Settings ▲':'⚙ Settings';
+});
 document.getElementById('hint-btn').addEventListener('click',doHint);
 document.getElementById('undo-btn').addEventListener('click',doUndo);
 document.getElementById('reveal-btn').addEventListener('click',doReveal);
@@ -2444,7 +2536,8 @@ function assignColors(booksArr){
 
 function showResultOverlay(type, icon, heading, body, order, streak, streakMax, onDone){
   var ov=document.getElementById('result-overlay');
-  if(!ov){setTimeout(onDone,1500);return;}
+  var sheet=document.getElementById('ro-sheet');
+  if(!ov){setTimeout(onDone,300);return;}
   document.getElementById('ro-icon').textContent=icon;
   document.getElementById('ro-heading').textContent=heading;
   document.getElementById('ro-body').textContent=body;
@@ -2463,20 +2556,25 @@ function showResultOverlay(type, icon, heading, body, order, streak, streakMax, 
     var needed=streakMax-streak;
     streakEl.textContent=needed>0?streak+' in a row! '+needed+' more to advance!':'Three in a row! Moving up!';
   }else if(type==='bad'){
-    streakEl.textContent='Try again — you can do it!';
+    streakEl.textContent='Keep going — you can do this!';
   }else{
     streakEl.textContent='';
   }
-  ov.style.cssText='display:flex;opacity:0;position:fixed;inset:0;z-index:8000;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;transition:opacity 0.25s ease;';
-  if(type==='ok')ov.style.background='linear-gradient(135deg,#14532D,#15803D,#16A34A)';
-  else if(type==='bad')ov.style.background='linear-gradient(135deg,#7F1D1D,#991B1B,#B91C1C)';
-  else ov.style.background='linear-gradient(135deg,#78350F,#92400E,#B45309)';
-  requestAnimationFrame(function(){requestAnimationFrame(function(){ov.style.opacity='1';});});
-  var delay=type==='ok'?1800:2400;
-  setTimeout(function(){
-    ov.style.opacity='0';
-    setTimeout(function(){ov.style.display='none';onDone();},250);
-  },delay);
+  var btnLabel=type==='ok'?'Next →':'Try again →';
+  document.getElementById('ro-next-btn').textContent=btnLabel;
+  if(type==='ok') sheet.style.background='linear-gradient(160deg,#14532D,#16A34A)';
+  else if(type==='bad') sheet.style.background='linear-gradient(160deg,#7F1D1D,#B91C1C)';
+  else sheet.style.background='linear-gradient(160deg,#78350F,#B45309)';
+  ov.style.display='block';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){ov.classList.add('visible');});});
+  // Wire the Next button — replace to avoid stacking listeners
+  var btn=document.getElementById('ro-next-btn');
+  var newBtn=btn.cloneNode(true); newBtn.textContent=btnLabel;
+  btn.parentNode.replaceChild(newBtn,btn);
+  newBtn.addEventListener('click',function(){
+    ov.classList.remove('visible');
+    setTimeout(function(){ov.style.display='none';onDone();},350);
+  });
 }
 
 buildDecoShelf();
@@ -2540,8 +2638,6 @@ let acadChecks = 0;    // checks this round
 let acadHints = 3;
 let acadBooks = [];
 let acadHistory = [];
-let acadDragSrc = null;
-let acadTouchDragSrc=null,acadTouchDragClone=null,acadTouchOX=0,acadTouchOY=0,acadTouchStartX=0,acadTouchStartY=0;
 let acadTapSel = null;
 let acadState = 'idle'; // idle | checked-ok | checked-bad | studying
 let acadStudySnapshot = null; // scrambled order saved during study phase
@@ -2654,6 +2750,10 @@ function acadLoadStage(){
   document.getElementById('acad-hint-btn').disabled = false;
   document.getElementById('acad-undo-btn').disabled = true;
   document.getElementById('acad-reveal-btn').style.display = 'none';
+  document.getElementById('acad-study-banner').style.display = 'none';
+  document.getElementById('acad-brow-check').style.display = 'flex';
+  document.getElementById('acad-brow-study').style.display = 'none';
+  acadStudySnapshot = null;
   acadHideResultPanel();
   acadUpdateDots(false);
   acadUpdateSteps();
@@ -2693,7 +2793,7 @@ function acadNewRound(){
   const s = acadSorted(picked);
   acadBooks = assignColors(attempt.map(function(b){return Object.assign({},b,{colorIdx:s.findIndex(function(x){return x.sv===b.sv&&x.lines.join('|')===b.lines.join('|');}),correct:null});}));
   const aso=document.getElementById('acad-shelf-outer');
-  if(aso){aso.className='shelf-outer diff-medium';}
+  if(aso){aso.className='shelf-outer diff-'+acadDifficulty;}
   acadRender();
 }
 
@@ -2712,7 +2812,7 @@ function acadUpdateLives(justLost){
   }
 }
 
-function acadSorted(arr){return[...arr].sort((a,b)=>a.sv<b.sv?-1:a.sv>b.sv?1:0);}
+function acadSorted(arr){return sortedB(arr);}
 
 function animateAcadBooksToSorted(){
   var shelf=document.getElementById('acad-shelf');
@@ -2747,149 +2847,59 @@ function animateAcadBooksToSorted(){
   });
   setTimeout(function(){
     newEls.forEach(function(el){el.style.transition='';});
-    acadShowResultPanel('ok','✅','Correct order!','Study the order above, then try again.','');
-    var btn=document.getElementById('acad-check-btn');
-    if(btn){btn.textContent='Got it — Try Again ↺';}
+    document.getElementById('acad-study-banner').style.display='flex';
+    document.getElementById('acad-brow-check').style.display='none';
+    document.getElementById('acad-brow-study').style.display='flex';
+    acadHideResultPanel();
   },550);
 }
-function acadIsSorted(arr){for(let i=0;i<arr.length-1;i++)if(arr[i].sv>arr[i+1].sv)return false;return true;}
-function acadCorrectness(){const s=acadSorted(acadBooks);return acadBooks.map((b,i)=>b.sv===s[i].sv&&b.lines.join('|')===s[i].lines.join('|'));}
+function acadIsSorted(arr){return isSorted(arr);}
+function acadCorrectness(){return calcCorrectness(acadBooks);}
 
+const _acadDragSrc={val:null};
 function acadRender(){
-  const shelf = document.getElementById('acad-shelf');
-  shelf.innerHTML = '';
-  acadBooks.forEach((b,i)=>{
-    const col = SC[b.colorIdx%SC.length];
-    const h=getBookHeight(b.colorIdx,'acad-shelf');
-    const w = WIDTHS[b.colorIdx%WIDTHS.length];
-    const el = document.createElement('div');
-    el.className = 'book dropping';
-    el.draggable = true;
-    const total=books.length;
-    const center=(total-1)/2;
-    const distFromCenter=total>1?Math.abs(i-center)/center:0;
-    const perspScale=total>2?(1-distFromCenter*0.03):1;
-    el.style.cssText = 'width:'+w+'px;height:'+Math.round(h*perspScale)+'px;animation-delay:'+(i*60)+'ms;transform-origin:bottom center;';
-    if(acadTapSel===i) el.classList.add('tapped');
-    const stc = b.correct===null?'':(b.correct?'ok':'bad');
-    const lbl = b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
-    el.innerHTML='<div class="bst '+stc+'"></div>'
-      +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:2px 2px 1px 1px;overflow:visible;">'
-      +'<div class="b-spine-top"></div>'
-      +'<div class="b-spine-edge"></div>'
-      +'<div class="b-spine-grip"></div>'
-      +'<div style="position:absolute;top:7px;left:50%;transform:translateX(-50%);background:'+col.lt+';color:'+col.fg+';font-size:7px;font-weight:700;font-family:DM Sans,sans-serif;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);white-space:nowrap;max-width:'+(w-8)+'px;overflow:hidden;text-overflow:ellipsis;z-index:3;">'+b.author+'</div>'
-      +((/[\u4e00-\u9fff\uac00-\ud7af]/.test(b.title))
-        ?'<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 3px 50px;"><div style="writing-mode:vertical-rl;transform:none;font-family:DM Sans,sans-serif;font-size:'+(w<55?'13':w<68?'16':'20')+'px;font-weight:700;color:'+col.fg+';letter-spacing:0.08em;text-shadow:0 1px 2px rgba(0,0,0,0.3);">'+b.title+'</div></div>'
-        :'<div style="flex:1;padding-bottom:54px;">'+SPINE_STYLES[b.colorIdx%SPINE_STYLES.length](b.title,col.fg,w,h)+'</div>')
-      +'<div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:#FAFAF8;color:#1a1a1a;border:none;border-radius:3px;width:'+(w-10)+'px;padding:5px 2px 6px;font-size:12px;font-weight:800;font-family:Courier New,Courier,monospace;text-align:center;line-height:1.45;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.3);z-index:2;">'+lbl+'</div>'
-      +'</div>';
-    el.addEventListener('dragstart',e=>{
-      acadDragSrc=i; e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('text/plain',String(i));
-      const clone=el.cloneNode(true);
-      clone.style.cssText='position:fixed;top:-1000px;left:-1000px;width:'+el.offsetWidth+'px;transform:rotate(-3deg) scale(1.06);opacity:0.95;border-radius:3px;pointer-events:none;';
-      document.body.appendChild(clone);
-      e.dataTransfer.setDragImage(clone,el.offsetWidth/2,el.offsetHeight/2);
-      setTimeout(()=>document.body.removeChild(clone),0);
-      requestAnimationFrame(()=>el.classList.add('dragging'));
-    });
-    el.addEventListener('dragend',()=>{
-      acadDragSrc=null;
-      document.querySelectorAll('#acad-shelf .book.dragging,.book.drag-target').forEach(x=>{x.classList.remove('dragging');x.classList.remove('drag-target');});
-    });
-    el.addEventListener('dragover',e=>{
-      e.preventDefault(); e.stopPropagation();
-      document.querySelectorAll('#acad-shelf .book.drag-target').forEach(x=>x.classList.remove('drag-target'));
-      if(acadDragSrc!==null&&acadDragSrc!==i) el.classList.add('drag-target');
-    });
-    el.addEventListener('dragleave',()=>el.classList.remove('drag-target'));
-    el.addEventListener('drop',e=>{
-      e.preventDefault(); e.stopPropagation();
-      el.classList.remove('drag-target');
-      if(acadDragSrc===null||acadDragSrc===i)return;
-      const rect=el.getBoundingClientRect();
-      const dropLeft=e.clientX<rect.left+rect.width/2;
-      const dst=dropLeft?i:(i+1>acadBooks.length?acadBooks.length:i);
-      const src=acadDragSrc; acadDragSrc=null;
+  const shelf=document.getElementById('acad-shelf');
+  shelf.innerHTML='';
+  const total=acadBooks.length;
+  const center=(total-1)/2;
+  const cfg={
+    booksArr:acadBooks,
+    tapSel:acadTapSel,
+    bigMode:false,
+    shelfSelector:'#acad-shelf',
+    dragSrcRef:_acadDragSrc,
+    onMove(src,dst){
       acadSaveHist();
       const m=acadBooks.splice(src,1)[0];
       acadBooks.splice(src<dst?dst-1:dst,0,m);
       acadAfterMove();
-    });
-    el.addEventListener('click',()=>acadHandleTap(i));
-    el.addEventListener('touchstart',function(e){
-      if(e.touches.length!==1)return;
-      const t=e.touches[0];
-      acadTouchDragSrc=i;
-      const r=el.getBoundingClientRect();
-      acadTouchOX=t.clientX-r.left;acadTouchOY=t.clientY-r.top;
-      acadTouchStartX=t.clientX;acadTouchStartY=t.clientY;
-      acadTouchDragClone=null;
-    },{passive:true});
-    el.addEventListener('touchmove',function(e){
-      if(acadTouchDragSrc!==i)return;
-      const t=e.touches[0];
-      if(!acadTouchDragClone){
-        const dx=t.clientX-acadTouchStartX,dy=t.clientY-acadTouchStartY;
-        if(Math.sqrt(dx*dx+dy*dy)<8)return;
-        acadTouchDragClone=el.cloneNode(true);
-        acadTouchDragClone.style.cssText='position:fixed;left:'+(t.clientX-acadTouchOX)+'px;top:'+(t.clientY-acadTouchOY)+'px;width:'+el.offsetWidth+'px;height:'+el.offsetHeight+'px;opacity:0.88;pointer-events:none;z-index:9999;transform:rotate(-3deg) scale(1.05);border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);';
-        document.body.appendChild(acadTouchDragClone);
-        el.classList.add('dragging');
-      }
-      acadTouchDragClone.style.left=(t.clientX-acadTouchOX)+'px';
-      acadTouchDragClone.style.top=(t.clientY-acadTouchOY)+'px';
-      e.preventDefault();
-    },{passive:false});
-    el.addEventListener('touchend',function(e){
-      if(acadTouchDragSrc!==i)return;
-      const t=e.changedTouches[0];
-      const wasDrag=!!acadTouchDragClone;
-      if(acadTouchDragClone){acadTouchDragClone.remove();acadTouchDragClone=null;}
-      el.classList.remove('dragging');
-      acadTouchDragSrc=null;
-      if(!wasDrag)return;
-      const under=document.elementFromPoint(t.clientX,t.clientY);
-      const tgt=under?under.closest('#acad-shelf .book'):null;
-      if(tgt&&tgt!==el){
-        const bookEls=Array.from(document.querySelectorAll('#acad-shelf .book'));
-        const dst=bookEls.indexOf(tgt);
-        if(dst!==-1){
-          const rect=tgt.getBoundingClientRect();
-          acadSaveHist();
-          const m=acadBooks.splice(i,1)[0];
-          const ad=t.clientX<rect.left+rect.width/2?dst:(dst+1>acadBooks.length?acadBooks.length:dst);
-          acadBooks.splice(i<ad?ad-1:ad,0,m);
-          acadAfterMove();
-        }
-      } else {
-        const shelfEl=document.getElementById('acad-shelf');
-        const sr=shelfEl.getBoundingClientRect();
-        if(t.clientX>=sr.left&&t.clientX<=sr.right&&t.clientY>=sr.top&&t.clientY<=sr.bottom){
-          acadSaveHist();
-          const m=acadBooks.splice(i,1)[0];
-          const els=Array.from(shelfEl.querySelectorAll('.book'));
-          let idx=acadBooks.length;
-          for(let j=0;j<els.length;j++){const r=els[j].getBoundingClientRect();if(t.clientX<r.left+r.width/2){idx=j;break;}}
-          acadBooks.splice(idx,0,m);
-          acadAfterMove();
-        }
-      }
-    },{passive:true});
+    },
+    onTap(i){acadHandleTap(i);},
+  };
+  acadBooks.forEach((b,i)=>{
+    const el=buildBookEl(b,i,cfg);
+    el.classList.add('dropping');
+    // perspective scale — books at edges appear slightly shorter
+    const h=getBookHeight(b.colorIdx,'acad-shelf');
+    const w=WIDTHS[b.colorIdx%WIDTHS.length];
+    const distFromCenter=total>1?Math.abs(i-center)/center:0;
+    const perspScale=total>2?(1-distFromCenter*0.03):1;
+    el.style.height=Math.round(h*perspScale)+'px';
+    el.style.animationDelay=(i*60)+'ms';
+    el.style.transformOrigin='bottom center';
     shelf.appendChild(el);
   });
   shelf.ondragover=e=>e.preventDefault();
   shelf.ondrop=e=>{
     e.preventDefault();
-    if(acadDragSrc===null||e.target!==shelf)return;
+    if(_acadDragSrc.val===null||e.target!==shelf)return;
     acadSaveHist();
-    const m=acadBooks.splice(acadDragSrc,1)[0];
+    const m=acadBooks.splice(_acadDragSrc.val,1)[0];
     const els=Array.from(shelf.querySelectorAll('.book'));
     let idx=acadBooks.length;
     for(let i=0;i<els.length;i++){const r=els[i].getBoundingClientRect();if(e.clientX<r.left+r.width/2){idx=i;break;}}
     acadBooks.splice(idx,0,m);
-    acadDragSrc=null; acadAfterMove();
+    _acadDragSrc.val=null; acadAfterMove();
   };
 }
 
@@ -2972,20 +2982,18 @@ function acadDoHint(){
   setTimeout(acadHideResultPanel, 3000);
 }
 
+function exitStudyMode(){
+  if(acadStudySnapshot){acadBooks=acadStudySnapshot;acadStudySnapshot=null;}
+  acadState='idle';
+  document.getElementById('acad-study-banner').style.display='none';
+  document.getElementById('acad-brow-check').style.display='flex';
+  document.getElementById('acad-brow-study').style.display='none';
+  acadHideResultPanel();
+  acadRender();
+}
+
 function acadCheckOrder(){
-  // If in study mode, restore the student's scrambled arrangement and let them try again
-  if(acadState==='studying'){
-    if(acadStudySnapshot){
-      acadBooks=acadStudySnapshot;
-      acadStudySnapshot=null;
-    }
-    acadState='idle';
-    acadHideResultPanel();
-    var btn=document.getElementById('acad-check-btn');
-    if(btn){btn.textContent='Check My Shelf';}
-    acadRender();
-    return;
-  }
+  if(acadState==='studying'){exitStudyMode();return;}
 
   acadChecks++;
   const c = acadCorrectness();
@@ -3378,7 +3386,13 @@ safeOn('acad-check-btn','click',acadCheckOrder);
 safeOn('acad-hint-btn','click',acadDoHint);
 safeOn('acad-undo-btn','click',acadDoUndo);
 safeOn('acad-reveal-btn','click',acadDoReveal);
-safeOn('acad-new-shelf-btn','click',acadNewShelf);
+safeOn('acad-try-again-btn','click',exitStudyMode);
+safeOn('acad-new-shelf-btn','click',function(){
+  document.getElementById('acad-study-banner').style.display='none';
+  document.getElementById('acad-brow-check').style.display='flex';
+  document.getElementById('acad-brow-study').style.display='none';
+  acadNewShelf();
+});
 safeOn('new-shelf-btn','click',gameNewShelf);
 
 // Override window.goTo for free play back button
@@ -3403,13 +3417,21 @@ showScreen('home');
 })();
 </script>
 
-<div id="result-overlay" style="display:none;">
-  <div class="ro-icon" id="ro-icon">✓</div>
-  <div class="ro-heading" id="ro-heading">Well done!</div>
-  <div class="ro-body" id="ro-body"></div>
-  <div class="ro-order" id="ro-order"></div>
-  <div class="ro-progress" id="ro-progress"></div>
-  <div class="ro-streak" id="ro-streak"></div>
+<div id="result-overlay">
+  <div class="ro-sheet" id="ro-sheet">
+    <div class="ro-handle"></div>
+    <div class="ro-top">
+      <div class="ro-icon" id="ro-icon">✓</div>
+      <div>
+        <div class="ro-heading" id="ro-heading">Well done!</div>
+        <div class="ro-body" id="ro-body"></div>
+      </div>
+    </div>
+    <div class="ro-order" id="ro-order"></div>
+    <div class="ro-progress" id="ro-progress"></div>
+    <div class="ro-streak" id="ro-streak"></div>
+    <button class="ro-next-btn" id="ro-next-btn">Next →</button>
+  </div>
 </div>
 </body>
 </html>
