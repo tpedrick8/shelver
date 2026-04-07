@@ -2167,7 +2167,7 @@ function buildExplOkText(){
   }
   return 'Order: '+parts.join(' · ')+'.';
 }
-function buildExplOk(){buildExplOkText();}
+function buildExplOk(){showResultPanel('ok','✅','Correct!',buildExplOkText(),'');}
 function buildExplBad(c){
   const bad=books.filter((_,i)=>!c[i]).map(b=>b.lines[b.lines.length-1]);
   showExpl('Out of place: '+bad.join(', ')+'.');
@@ -2428,10 +2428,18 @@ function highlightDeweyClasses(deweyNums){
 }
 
 var acadMuted=false;
+var _audioCtx=null;
+function getAudioCtx(){
+  if(!_audioCtx||_audioCtx.state==='closed'){
+    _audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  }
+  if(_audioCtx.state==='suspended')_audioCtx.resume();
+  return _audioCtx;
+}
 function playSound(type){
   if(acadMuted)return;
   try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var ctx=getAudioCtx();
     var osc=ctx.createOscillator();
     var gain=ctx.createGain();
     osc.connect(gain);gain.connect(ctx.destination);
@@ -3326,6 +3334,9 @@ function launchDailyChallenge(){
   var savedDiff=difficulty;
   difficulty='easy';
   level=5;
+  // Sync Settings UI toggles to match daily values
+  document.querySelectorAll('#diff-tog .sb').forEach(function(b){b.classList.toggle('on',b.dataset.diff==='easy');});
+  document.querySelectorAll('#lvl-tog .sb').forEach(function(b){b.classList.toggle('on',b.dataset.lvl==='5');});
 
   var pool=dailyCat.stype==='dewey'?mkDewey(dailyCat.rawSrc,dailyCat.rawFn):mkAlpha(dailyCat.rawSrc,dailyCat.rawFn);
   difficulty=savedDiff;
