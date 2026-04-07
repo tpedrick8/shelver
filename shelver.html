@@ -1829,7 +1829,8 @@ function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.
 function buildBookEl(b, i, cfg){
   const col=SC[b.colorIdx%SC.length];
   const extra=cfg.bigMode?18:0;
-  const w=WIDTHS[b.colorIdx%WIDTHS.length]+extra;
+  const scale=cfg.widthScale||1;
+  const w=Math.max(30, Math.floor((WIDTHS[b.colorIdx%WIDTHS.length]+extra)*scale));
   const h=getBookHeight(b.colorIdx, cfg.shelfSelector)+extra;
   const el=document.createElement('div');
   el.className='book';
@@ -2051,10 +2052,14 @@ const _gameDragSrc={val:null};
 function render(){
   const shelf=document.getElementById('shelf');
   shelf.innerHTML='';
+  const extra=bigMode?18:0;
+  const totalW=books.reduce((s,b)=>s+WIDTHS[b.colorIdx%WIDTHS.length]+extra+3,0);
+  const widthScale=shelf.offsetWidth>0?Math.min(1,(shelf.offsetWidth-12)/totalW):1;
   const cfg={
     booksArr:books,
     tapSel,
     bigMode,
+    widthScale,
     shelfSelector:'#shelf',
     dragSrcRef:_gameDragSrc,
     onMove(src,dst){
@@ -2887,10 +2892,13 @@ function acadRender(){
   shelf.innerHTML='';
   const total=acadBooks.length;
   const center=(total-1)/2;
+  const totalW=acadBooks.reduce((s,b)=>s+WIDTHS[b.colorIdx%WIDTHS.length]+3,0);
+  const widthScale=shelf.offsetWidth>0?Math.min(1,(shelf.offsetWidth-12)/totalW):1;
   const cfg={
     booksArr:acadBooks,
     tapSel:acadTapSel,
     bigMode:false,
+    widthScale,
     shelfSelector:'#acad-shelf',
     dragSrcRef:_acadDragSrc,
     onMove(src,dst){
