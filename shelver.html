@@ -758,6 +758,471 @@ align-self:flex-end;overflow:hidden;}
   padding-bottom:1.5rem;text-align:center;
 }
 
+/* ===== PHASE 1 VISUAL MAKEOVER ===== */
+:root{
+  --phase1-cream:#fbf7f1;
+  --phase1-panel:#fffdf9;
+  --phase1-border:#e9dccf;
+  --phase1-ink:#2d241f;
+  --phase1-muted:#7c7066;
+  --phase1-accent:#c5763d;
+  --phase1-accent-deep:#8b5a35;
+  --phase1-fiction:#7c5cff;
+  --phase1-fiction-soft:#f1edff;
+  --phase1-nonfiction:#2da36c;
+  --phase1-nonfiction-soft:#eaf8f0;
+  --phase1-daily:#3688e8;
+  --phase1-daily-soft:#ebf4ff;
+  --phase1-shadow:0 10px 26px rgba(98,74,55,0.08);
+  --phase1-shadow-strong:0 16px 36px rgba(98,74,55,0.12);
+}
+
+body{
+  background:
+    radial-gradient(circle at top left, rgba(197,118,61,0.10), transparent 32%),
+    radial-gradient(circle at 90% 10%, rgba(124,92,255,0.08), transparent 24%),
+    linear-gradient(180deg, #fffdfa 0%, var(--phase1-cream) 100%);
+  color:var(--phase1-ink);
+}
+
+.home-screen{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(197,118,61,0.08), transparent 25%),
+    linear-gradient(180deg, #fffdfa 0%, var(--phase1-cream) 100%);
+  padding:0 18px 28px;
+}
+
+.home-hero{
+  width:min(100%,760px);
+  margin:28px auto 18px;
+  padding:26px 28px 22px;
+  border:1px solid var(--phase1-border);
+  border-radius:30px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,250,244,0.98));
+  box-shadow:var(--phase1-shadow);
+  text-align:center;
+}
+
+.home-logo{
+  display:inline-flex;
+  align-items:center;
+  gap:16px;
+  text-align:left;
+}
+
+.home-logo-icon{
+  width:76px;
+  height:76px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:linear-gradient(180deg,#fff7ef,#fff1e0);
+  border:1px solid var(--phase1-border);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(197,118,61,0.10);
+}
+
+.home-logo-icon svg{
+  width:58px;
+  height:58px;
+  display:block;
+}
+
+.home-logo-icon img{
+  width:58px;
+  height:58px;
+  display:block;
+  object-fit:contain;
+}
+
+.home-logo-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.home-title{
+  font-family:Lora,serif;
+  font-size:clamp(2.5rem,4vw,3.5rem);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:0.95;
+  color:var(--phase1-accent-deep);
+}
+
+.home-sub{
+  margin:0;
+  font-size:0.9rem;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--phase1-accent);
+}
+
+.home-tagline{
+  max-width:33ch;
+  margin:18px auto 0;
+  font-size:1rem;
+  line-height:1.6;
+  color:var(--phase1-muted);
+}
+
+.home-shelf-banner{
+  max-width:760px;
+  margin:0 auto 20px;
+  padding:14px 18px 16px;
+  border:1px solid var(--phase1-border);
+  border-radius:24px;
+  background:#fffdf9;
+  box-shadow:var(--phase1-shadow);
+}
+
+.home-shelf-banner::after{
+  height:10px;
+  border-radius:999px;
+  background:linear-gradient(90deg, #e9d9c6, #d8c0a9);
+}
+
+.hsb{
+  border-radius:10px 10px 4px 4px !important;
+  box-shadow:none !important;
+  opacity:0.95;
+}
+
+.home-cards{
+  gap:18px;
+}
+
+.home-card{
+  min-height:220px;
+  border:1px solid var(--phase1-border);
+  border-radius:28px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,251,246,0.98));
+  box-shadow:var(--phase1-shadow);
+  padding:22px 22px 20px;
+  overflow:hidden;
+}
+
+.home-card::before{
+  height:6px;
+  border-radius:28px 28px 0 0;
+}
+
+.home-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--phase1-shadow-strong);
+}
+
+.home-card-body{
+  gap:10px;
+}
+
+.home-card-title{
+  color:var(--phase1-ink);
+  font-size:1.2rem;
+}
+
+.home-card-sub{
+  color:var(--phase1-muted);
+  line-height:1.55;
+  font-size:0.96rem;
+}
+
+.home-card-badge{
+  display:inline-flex;
+  align-self:flex-start;
+  border-radius:999px;
+  border:1px solid transparent;
+  padding:10px 14px;
+  font-size:0.79rem;
+  line-height:1.35;
+  font-weight:700;
+  box-shadow:none;
+}
+
+.home-card.everybody{
+  background:linear-gradient(180deg,#fff 0%, #fbf7ff 100%);
+}
+
+.home-card.everybody::before{
+  background:linear-gradient(90deg,#8a6aff,#6d56ff);
+}
+
+.home-card.everybody .home-card-badge{
+  background:var(--phase1-fiction-soft);
+  color:#573fd2;
+  border-color:rgba(124,92,255,0.15);
+}
+
+.home-card.nonfiction{
+  background:linear-gradient(180deg,#fff 0%, #f8fdf9 100%);
+}
+
+.home-card.nonfiction::before{
+  background:linear-gradient(90deg,#38b27a,#23915f);
+}
+
+.home-card.nonfiction .home-card-badge{
+  background:var(--phase1-nonfiction-soft);
+  color:#1b7d50;
+  border-color:rgba(45,163,108,0.16);
+}
+
+.home-card.daily{
+  background:linear-gradient(180deg,#fff 0%, #f7fbff 100%);
+}
+
+.home-card.daily::before{
+  background:linear-gradient(90deg,#49a0ff,#5d7ef6);
+}
+
+.home-card.daily .home-card-badge{
+  background:var(--phase1-daily-soft);
+  color:#2b6fb9;
+  border-color:rgba(54,136,232,0.16);
+}
+
+.home-card.freeplay::before{
+  background:linear-gradient(90deg,#d39155,#bf6e34);
+}
+
+.home-card.freeplay .home-card-badge{
+  background:#fff1e5;
+  color:#a05d2e;
+  border-color:rgba(197,118,61,0.16);
+}
+
+.home-mini-shelf{
+  min-height:86px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:none;
+  background:linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12));
+}
+
+.home-mini-shelf::after{
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(175,137,106,0.55), rgba(146,105,72,0.65));
+}
+
+.home-crest{
+  position:relative;
+  width:112px;
+  height:62px;
+  margin:0 auto;
+}
+
+.home-crest img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 12px rgba(98,74,55,0.08));
+}
+
+.home-footer{
+  color:#8e7f73;
+  font-size:0.8rem;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin-top:8px;
+}
+
+.cat-badge,
+.stage-progress,
+.study-banner,
+.result-panel{
+  border-radius:20px;
+  box-shadow:var(--phase1-shadow);
+}
+
+.cat-badge{
+  background:#fffdf9;
+  color:var(--phase1-ink);
+  border:1px solid var(--phase1-border);
+}
+
+.cg,
+.tb,
+.abtn,
+.pill{
+  border-color:var(--phase1-border);
+  box-shadow:none;
+}
+
+.tb,
+.abtn,
+.pill{
+  background:#fffdf9;
+}
+
+.tb:hover,
+.abtn:hover{
+  background:#fff7ef;
+}
+
+.cbtn{
+  background:linear-gradient(180deg,#d3864c,#bf6e34);
+  box-shadow:0 3px 0 #8d4f25, 0 10px 16px rgba(191,110,52,0.18);
+}
+
+.cbtn:hover{
+  background:linear-gradient(180deg,#d88f59,#c9763a);
+}
+
+.cbtn-amber{
+  background:linear-gradient(180deg,#d39155,#bf6e34)!important;
+  box-shadow:0 3px 0 #8d4f25, 0 10px 16px rgba(191,110,52,0.18)!important;
+}
+
+.shelf-outer,
+.shelf-outer.diff-easy,
+.shelf-outer.diff-medium,
+.shelf-outer.diff-hard{
+  background:
+    linear-gradient(180deg, #f1e2d2 0%, #ead6c0 100%);
+  border:1px solid rgba(147,110,79,0.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 12px 28px rgba(101,74,54,0.12);
+}
+
+.shelf-outer::before{
+  height:0;
+  background:none;
+}
+
+.shelf-outer::after{
+  height:12px;
+  background:linear-gradient(180deg, rgba(140,103,71,0.16), rgba(255,255,255,0.18));
+}
+
+.shelf-dir-label,
+.shelf-dir-arrow::after{
+  color:rgba(91,59,36,0.55);
+}
+
+.shelf-dir-arrow{
+  background:linear-gradient(90deg, rgba(91,59,36,0.12), rgba(91,59,36,0.32), rgba(91,59,36,0.12));
+}
+
+.book{
+  border-radius:8px 8px 4px 4px;
+  filter:none;
+  transition:transform 0.16s cubic-bezier(.34,1.56,.64,1), opacity 0.14s, box-shadow 0.18s;
+  box-shadow:0 8px 14px rgba(57,43,33,0.10);
+}
+
+.book:hover{
+  filter:none;
+  box-shadow:0 12px 18px rgba(57,43,33,0.14);
+}
+
+.book.dragging{
+  filter:none;
+  box-shadow:0 10px 18px rgba(57,43,33,0.16);
+}
+
+.b-spine{
+  border-radius:8px 8px 0 0;
+}
+
+.b-spine::before{
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0.10) 0%,
+      rgba(255,255,255,0.05) 18%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0,0,0,0.08) 100%);
+}
+
+.b-spine::after,
+.b-spine-edge,
+.b-spine-grip{
+  opacity:0.45;
+}
+
+.b-lbl{
+  border-radius:8px;
+  box-shadow:0 2px 4px rgba(57,43,33,0.10);
+}
+
+.result-panel.ok{
+  background:linear-gradient(180deg,#f4fff7,#e7f8ee);
+}
+
+.result-panel.bad{
+  background:linear-gradient(180deg,#fff7f5,#fdeceb);
+}
+
+.result-panel.retrain{
+  background:linear-gradient(180deg,#fff8ef,#fcebd8);
+}
+
+.svg-badge-img,
+.svg-academy-badge,
+.svg-stage-badge,
+.svg-certificate-seal{
+  display:block;
+  max-width:100%;
+  height:auto;
+  margin:0 auto;
+}
+
+.svg-academy-badge{
+  width:140px;
+}
+
+.svg-stage-badge{
+  width:148px;
+}
+
+.svg-certificate-seal{
+  width:132px;
+}
+
+@media (max-width: 640px){
+  .home-hero{
+    padding:22px 18px 18px;
+    border-radius:24px;
+  }
+
+  .home-logo{
+    gap:12px;
+    align-items:center;
+  }
+
+  .home-logo-icon{
+    width:62px;
+    height:62px;
+    border-radius:18px;
+  }
+
+  .home-logo-icon svg{
+    width:48px;
+    height:48px;
+  }
+
+  .home-logo-icon img{
+    width:48px;
+    height:48px;
+  }
+
+  .home-title{
+    font-size:2.3rem;
+  }
+
+  .home-card{
+    min-height:200px;
+    padding:18px;
+    border-radius:24px;
+  }
+
+  .home-mini-shelf{
+    min-height:78px;
+  }
+}
+
 
 
 
@@ -822,11 +1287,12 @@ window.addEventListener('unhandledrejection', function(e) {
 <div class="home-screen" id="screen-home" style="display:flex;">
   <div class="home-hero">
     <div class="home-logo">
-      <div class="home-logo-icon">🦉</div>
-      <div class="home-title">Shelver</div>
+      <div class="home-logo-copy">
+        <div class="home-title">Shelver</div>
+        <div class="home-sub">Shelf University</div>
+      </div>
     </div>
-    <div class="home-sub">Junior Librarian Academy</div>
-    <div class="home-tagline">Can you put every book in the right place?</div>
+    <div class="home-tagline">Train like a librarian. Sort every book into the right place.</div>
   </div>
   <div class="home-shelf-banner">
     <div class="hsb" style="background:#E74C3C;width:22px;height:62px;"></div>
@@ -859,35 +1325,31 @@ window.addEventListener('unhandledrejection', function(e) {
 
     <div class="home-card everybody" id="btn-everybody-acad">
       <div class="home-mini-shelf">
-        <div class="hms" style="background:#3B82F6;width:18px;height:52px;"></div>
-        <div class="hms" style="background:#8B5CF6;width:22px;height:64px;"></div>
-        <div class="hms" style="background:#EC4899;width:17px;height:46px;"></div>
-        <div class="hms" style="background:#6366F1;width:20px;height:58px;"></div>
-        <div class="hms" style="background:#A855F7;width:18px;height:54px;"></div>
+        <div class="home-crest fiction-crest" aria-hidden="true">
+          <img src="./fiction-academy-badge.svg" alt="">
+        </div>
       </div>
       <div class="home-card-body">
         <div class="home-card-title">Fiction Academy</div>
-        <div class="home-card-sub">Shelve Everybody Picture Books in alphabetical order by author</div>
-        <div class="home-card-badge">Novice · Apprentice · Expert · Legend</div>
+        <div class="home-card-sub">Sort picture books by author in clean alphabetical order</div>
+        <div class="home-card-badge">Story Scout · Spine Sorter · Shelf Star</div>
       </div>
     </div>
 
     <div class="home-card nonfiction" id="btn-nonfiction-acad">
       <div class="home-mini-shelf">
-        <div class="hms" style="background:#10B981;width:18px;height:46px;"></div>
-        <div class="hms" style="background:#059669;width:22px;height:62px;"></div>
-        <div class="hms" style="background:#047857;width:17px;height:52px;"></div>
-        <div class="hms" style="background:#34D399;width:20px;height:56px;"></div>
-        <div class="hms" style="background:#065F46;width:18px;height:48px;"></div>
+        <div class="home-crest nonfiction-crest" aria-hidden="true">
+          <img src="./nonfiction-academy-badge.svg" alt="">
+        </div>
       </div>
       <div class="home-card-body">
         <div class="home-card-title">Nonfiction Academy</div>
-        <div class="home-card-sub">Shelve nonfiction books by Dewey Decimal number</div>
-        <div class="home-card-badge">Novice · Apprentice · Expert · Legend</div>
+        <div class="home-card-sub">Sort nonfiction books by Dewey number and call number</div>
+        <div class="home-card-badge">Dewey Detective · Decimal Navigator · Stacks Scholar</div>
       </div>
     </div>
 
-    <div class="home-card daily" id="btn-daily">
+    <div class="home-card daily" id="btn-daily" style="opacity:0.4;pointer-events:none;filter:grayscale(1);">
       <div class="home-mini-shelf">
         <div class="hms" style="background:#0EA5E9;width:18px;height:52px;"></div>
         <div class="hms" style="background:#6366F1;width:22px;height:60px;"></div>
@@ -920,7 +1382,7 @@ window.addEventListener('unhandledrejection', function(e) {
     </div>
 
   </div>
-  <div class="home-footer">Shelver &nbsp;·&nbsp; Junior Librarian Academy</div>
+  <div class="home-footer">Shelver &nbsp;·&nbsp; Shelf University</div>
 </div>
 
 <div class="acad-screen" id="screen-acad" style="display:none;">
@@ -1769,6 +2231,39 @@ let books=[],history=[],tapSel=null;
 let state='idle',hints=3,moves=0,streak=0,score=0,best=0,roundScored=false;
 let timerSec=30,timerMax=30,timerIv=null,checks=0,difficulty='easy';
 
+const SVG_ASSETS={
+  shelfUniversity:'./shelf-university-badge.svg',
+  fictionAcademy:'./fiction-academy-badge.svg',
+  nonfictionAcademy:'./nonfiction-academy-badge.svg',
+  fictionStages:[
+    './fiction-level-1-story-scout.svg',
+    './fiction-level-2-spine-sorter.svg',
+    './fiction-level-3-shelf-star.svg',
+    './level-master-shelf-legend.svg'
+  ],
+  nonfictionStages:[
+    './nonfiction-level-1-dewey-detective.svg',
+    './nonfiction-level-2-decimal-navigator.svg',
+    './nonfiction-level-3-stacks-scholar.svg',
+    './level-master-shelf-legend.svg'
+  ]
+};
+
+function setBadgeImage(id, src, alt, cls){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML='<img src="'+src+'" alt="'+(alt||'')+'" class="'+(cls||'svg-badge-img')+'">';
+}
+
+function getAcademyBadgeSrc(type){
+  return type==='nonfiction'?SVG_ASSETS.nonfictionAcademy:SVG_ASSETS.fictionAcademy;
+}
+
+function getStageBadgeSrc(type, stageIdx){
+  var arr=type==='nonfiction'?SVG_ASSETS.nonfictionStages:SVG_ASSETS.fictionStages;
+  return arr[Math.max(0,Math.min(stageIdx,arr.length-1))];
+}
+
 // ── Screen navigation ─────────────────────────────────────────────────────
 window.goTo=function goTo(s){
   document.querySelectorAll('.screen,.game-screen').forEach(x=>{
@@ -2345,7 +2840,7 @@ function showStageTransition(stageIdx, totalStages, stageName, onDone){
   const msg = messages[stageIdx % messages.length];
 
   // Fill content
-  document.getElementById('so-stars').textContent = msg.icon;
+  setBadgeImage('so-stars', getStageBadgeSrc(acadType, Math.max(0, stageIdx-1)), 'Stage complete badge', 'svg-stage-badge');
   document.getElementById('so-top').textContent = 'Stage ' + stageIdx + ' complete';
   document.getElementById('so-heading').textContent = msg.heading;
   document.getElementById('so-sub').textContent = msg.sub;
@@ -2577,13 +3072,12 @@ var STAGE_TIPS={
   everybody:['Look at the letters on the label and put them in A-B-C order!','When two labels start with the same letter, look at the SECOND letter.','Some of these labels start with similar letters — look carefully!','The final challenge! These labels look very similar — read every letter carefully.'],
   nonfiction:['Look at the NUMBERS on the label — smaller numbers come first!','These numbers are in different hundreds. Which is smallest?','Some numbers are close together — compare digit by digit.','The final challenge! These decimals look very similar — compare each digit carefully.']
 };
-var STAGE_BADGES=['\u{1F331}','\u{1F4D6}','\u{1F516}','\u{1F3C6}'];
 function showStageIntro(stageIdx,totalStages,stageName,onDone){
   var overlay=document.getElementById('stage-intro-overlay');
   if(!overlay){onDone();return;}
   var acad=ACADEMIES[acadType];
   var tips=STAGE_TIPS[acadType]||STAGE_TIPS.fiction;
-  document.getElementById('si-badge').textContent=['\u{1F331}','\u{1F4D6}','\u{1F516}','\u{1F3C6}'][stageIdx]||'\u{1F4DA}';
+  setBadgeImage('si-badge', getStageBadgeSrc(acadType, stageIdx), 'Stage badge', 'svg-stage-badge');
   document.getElementById('si-stage').textContent='Stage '+(stageIdx+1)+' of '+totalStages;
   document.getElementById('si-title').textContent=stageName;
   document.getElementById('si-desc').textContent=acad&&acad.stages[stageIdx]?acad.stages[stageIdx].desc:'';
@@ -2765,7 +3259,7 @@ function showWelcomeOverlay(type, onDone){
   var acad = ACADEMIES[type];
   var saved = loadAcadProgress(type);
   document.getElementById('welcome-title').textContent = acad.title;
-  document.getElementById('welcome-icon').textContent = type==='everybody' ? '📚' : '🔢';
+  setBadgeImage('welcome-icon', getAcademyBadgeSrc(type), acad.title+' badge', 'svg-academy-badge');
   var inp = document.getElementById('welcome-name');
   inp.value = acadStudentName || '';
   var ov = document.getElementById('welcome-overlay');
@@ -3305,9 +3799,8 @@ function acadLaunchConfetti(cwId){
 function showCertificate(){
   clearAcadProgress();
   const acad=ACADEMIES[acadType];
-  const icon=acadCheated?'😈':'📚';
   const title=acadType==='everybody'?'Fiction Academy':'Nonfiction Academy';
-  document.getElementById('name-prompt-icon').textContent=icon;
+  setBadgeImage('name-prompt-icon', acadCheated?SVG_ASSETS.shelfUniversity:getAcademyBadgeSrc(acadType), title+' badge', 'svg-academy-badge');
   document.getElementById('name-prompt-heading').textContent=acadCheated?'You cheated!':'You did it!';
   document.getElementById('name-prompt-sub').textContent=acadCheated?title+' — with a little help 😏':title+' complete!';
   document.getElementById('cert-name').value=acadStudentName||'';
@@ -3317,10 +3810,9 @@ function showCertificate(){
 
 function revealCertificate(){
   const name=document.getElementById('cert-name').value.trim()||'A Junior Librarian';
-  const icon=acadCheated?'😈':(acadType==='everybody'?'📚':'🏛️');
   const title=acadType==='everybody'?'Fiction Shelving Academy':'Nonfiction Shelving Academy';
   document.getElementById('cert-reveal-name').textContent=name;
-  document.getElementById('cert-reveal-seal').textContent=icon;
+  setBadgeImage('cert-reveal-seal', acadCheated?SVG_ASSETS.shelfUniversity:getAcademyBadgeSrc(acadType), title+' seal', 'svg-certificate-seal');
   document.getElementById('cert-reveal-title').textContent=title;
   document.getElementById('cert-reveal-academy').textContent='Junior Librarian Academy';
   document.getElementById('cert-reveal-for').textContent=acadCheated?'for successfully CHEATING through':'for successfully completing';
