@@ -49,7 +49,7 @@ body{
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;flex-direction:column;}
 .screen.fade-in{animation:fadeIn 0.3s ease forwards;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
 /* ── INTRO SCREENS ── */
 .wrap{max-width:660px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column;padding:2rem 1.25rem 3rem;}
@@ -139,17 +139,12 @@ body{
 /* result cards */
 .rrow{display:none;gap:8px;margin-bottom:0.85rem;}
 .rc{flex:1;border-radius:10px;padding:10px 12px;}
-.rc
-.rc
+.rc.ok{background:var(--green-bg);border:1.5px solid var(--green);}
+.rc.bad{background:var(--red-bg);border:1.5px solid var(--red);}
 .rc.neu{background:#F5F4F0;border:1.5px solid var(--border);}
 
-.rc.ok 
-.rc.bad 
-.rc.neu .rc.ok .rc.bad .rc-l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;color:var(--ink-muted);}
-
-.rc.ok 
-.rc.bad 
-.rc.neu .rc.ok .rc.bad .rc-n{font-size:24px;font-weight:600;line-height:1;color:var(--ink);}
+.rc-l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;color:var(--ink-muted);}
+.rc-n{font-size:24px;font-weight:600;line-height:1;color:var(--ink);}
 
 /* explain box */
 .expl{background:linear-gradient(135deg,#EDE9FE,#E0F2FE);border:2px solid #C4B5FD;border-radius:14px;padding:12px 16px;font-size:13px;color:#4C1D95;margin-bottom:0.85rem;line-height:1.6;display:none;font-weight:500;}
@@ -318,7 +313,7 @@ align-self:flex-end;overflow:hidden;}
 
 /* ── ACADEMY ── */
 
-.home-screen{flex-direction:column;align-items:center;}min-height:100vh;background:var(--cream);}
+.home-screen{min-height:100vh;background:var(--cream);flex-direction:column;align-items:center;}
 
 
 .home-title em{font-style:italic;}
@@ -334,10 +329,6 @@ align-self:flex-end;overflow:hidden;}
 .home-card-icon{font-size:44px;line-height:1;}
 
 
-
-.home-card.fiction 
-.home-card.nonfiction 
-.home-card.freeplay 
 
 /* Academy game screen */
 .acad-screen{display:none;min-height:100vh;overflow:hidden;}
@@ -497,21 +488,22 @@ align-self:flex-end;overflow:hidden;}
 
 /* Unified result panel */
 .result-panel{display:none;border-radius:14px;padding:10px 14px;margin-bottom:0.5rem;border:2px solid;}
-.result-panel
-.result-panel
+.result-panel.ok{background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border-color:#4ADE80;}
+.result-panel.bad{background:linear-gradient(135deg,#FEE2E2,#FECACA);border-color:#F87171;}
 .result-panel.retrain{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-color:#FBBF24;}
 .rp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .rp-icon{font-size:28px;line-height:1;}
 
-.result-panel.ok 
-.result-panel.bad 
+.result-panel.ok .rp-heading{color:#14532D;}
+.result-panel.bad .rp-heading{color:#7F1D1D;}
 .result-panel.retrain .rp-heading{color:#78350F;}
 
-.result-panel.ok 
+.result-panel.ok .rp-score{color:#14532D;}
 .result-panel.bad .rp-score{color:#7F1D1D;}
+.result-panel.retrain .rp-score{color:#78350F;}
 
-.result-panel.ok 
-.result-panel.bad 
+.result-panel.ok .rp-body{color:#166534;}
+.result-panel.bad .rp-body{color:#991B1B;}
 .result-panel.retrain .rp-body{color:#92400E;}
 .rp-order{margin-top:8px;font-size:12px;font-weight:600;opacity:0.8;word-break:break-word;}
 
@@ -1774,7 +1766,7 @@ const NAV=[
 let currentCat=null;
 let level=3,bigMode=false,timerOn=false,showAlpha=false;
 let books=[],history=[],tapSel=null;
-let state='idle',hints=3,moves=0,streak=0,score=0,best=0;
+let state='idle',hints=3,moves=0,streak=0,score=0,best=0,roundScored=false;
 let timerSec=30,timerMax=30,timerIv=null,checks=0,difficulty='easy';
 
 // ── Screen navigation ─────────────────────────────────────────────────────
@@ -2030,7 +2022,7 @@ function getDailySeed(key){
 // ── Game ──────────────────────────────────────────────────────────────────
 function newGame(){
   if(!currentCat)return;
-  stopTimer();state='idle';hints=3;moves=0;checks=0;history=[];tapSel=null;
+  stopTimer();state='idle';hints=3;moves=0;checks=0;history=[];tapSel=null;roundScored=false;
   hideResultPanel();sd('stars-row','none');const rs=document.getElementById('round-score');if(rs)rs.textContent='';
   document.getElementById('reveal-btn').style.display='none';
   document.getElementById('hint-btn').disabled=false;
@@ -2167,9 +2159,19 @@ function animateBooks(correctArr){
 function handleTap(i){if(tapSel===null){tapSel=i;render();}else if(tapSel===i){tapSel=null;render();}else{doMove(tapSel,i);tapSel=null;}}
 function doMove(src,dst){saveHist();const m=books.splice(src,1)[0];books.splice(src<dst?dst-1:dst,0,m);afterMove();}
 function saveHist(){history.push(books.map(b=>({...b})));if(history.length>30)history.shift();document.getElementById('undo-btn').disabled=false;}
+function clearCheckedState(){
+  if(state!=='checked-wrong'&&state!=='checked-correct')return;
+  state='idle';
+  books=books.map(b=>({...b,correct:null}));
+  hideResultPanel();
+  sd('stars-row','none');
+  const rs=document.getElementById('round-score');
+  if(rs)rs.textContent='';
+  document.getElementById('reveal-btn').style.display='none';
+}
 function afterMove(){
   moves++;upMoves();
-  if(state==='checked-wrong'){state='idle';books=books.map(b=>({...b,correct:null}));hideResultPanel();sd('stars-row','none');const rs=document.getElementById('round-score');if(rs)rs.textContent='';document.getElementById('reveal-btn').style.display='none';}
+  clearCheckedState();
   render();
 }
 function upMoves(){document.getElementById('moves-pill').textContent='Moves: '+moves;}
@@ -2177,7 +2179,7 @@ function doUndo(){
   if(!history.length)return;
   books=history.pop();if(!history.length)document.getElementById('undo-btn').disabled=true;
   moves=Math.max(0,moves-1);upMoves();
-  if(state==='checked-wrong'){state='idle';hideResultPanel();sd('stars-row','none');const rs=document.getElementById('round-score');if(rs)rs.textContent='';document.getElementById('reveal-btn').style.display='none';}
+  clearCheckedState();
   render();
 }
 function doHint(){
@@ -2188,7 +2190,7 @@ function doHint(){
   if(hints===0)document.getElementById('hint-btn').disabled=true;
   const wb=books[wi],s=sortedB(books),si=s.findIndex(x=>x.sv===wb.sv&&x.lines.join('|')===wb.lines.join('|'));
   showExpl('"'+wb.lines[wb.lines.length-1]+'" at position '+(wi+1)+' should be at position '+(si+1)+'.');
-  const els=document.querySelectorAll('.book');
+  const els=document.querySelectorAll('#shelf .book');
   if(els[wi]){els[wi].classList.add('hinted');setTimeout(()=>els[wi].classList.remove('hinted'),2200);}
 }
 function doReveal(){showExpl('Correct order: '+sortedB(books).map(b=>b.lines[b.lines.length-1]).join(' → '));}
@@ -2196,6 +2198,7 @@ function doReveal(){showExpl('Correct order: '+sortedB(books).map(b=>b.lines[b.l
 function checkOrder(){
   checks++;
   stopTimer();
+  const alreadyScored=roundScored;
   const c=correctness();
   books=books.map((b,i)=>({...b,correct:c[i]}));
   const nOk=c.filter(Boolean).length,allOk=nOk===books.length;
@@ -2203,16 +2206,22 @@ function checkOrder(){
   render();
   setTimeout(()=>animateBooks(c),50);
   if(allOk){
-    state='checked-correct';streak++;if(streak>best)best=streak;
-    const hintsUsed=3-hints;
-    const stars=checks===1&&hintsUsed===0?3:checks<=2&&hintsUsed===0?2:1;
-    const pts=level*(stars===3?30:stars===2?20:10);
-    score+=pts;
-    setTimeout(()=>showStarsN(stars,pts),300);
-    buildExplOk();confetti();
+    state='checked-correct';
+    if(alreadyScored){
+      showResultPanel('ok','✅','Already scored',buildExplOkText(),'Points already awarded for this shelf.');
+    }else{
+      roundScored=true;
+      streak++;if(streak>best)best=streak;
+      const hintsUsed=3-hints;
+      const stars=checks===1&&hintsUsed===0?3:checks<=2&&hintsUsed===0?2:1;
+      const pts=level*(stars===3?30:stars===2?20:10);
+      score+=pts;
+      setTimeout(()=>showStarsN(stars,pts),300);
+      buildExplOk();confetti();
+    }
     document.getElementById('reveal-btn').style.display='none';
     // Daily challenge completion tracking
-    if(window._isDailyChallenge){
+    if(window._isDailyChallenge&&!alreadyScored){
       localStorage.setItem('shelver-daily-'+window._isDailyChallenge,'1');
       window._isDailyChallenge=null;
       initDailyBadge();
@@ -3530,4 +3539,3 @@ showScreen('home');
 </div>
 </body>
 </html>
-
