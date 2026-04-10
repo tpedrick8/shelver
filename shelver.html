@@ -2463,7 +2463,10 @@ function checkOrder(){
       localStorage.setItem('shelver-daily-'+dailyKey,'1');
       initDailyBadge();
       lockDailyChallengeState();
-      showResultPanel('ok','🏅','Daily Challenge complete','Perfect work. One attempt, eight books, and you got them all.','Come back tomorrow for a new challenge.');
+      showResultOverlay('ok','🏅','Daily Challenge complete','Perfect work. One attempt, eight books, and you got them all.','Come back tomorrow for a new challenge.',0,0,function(){
+        clearDailyChallengeState();
+        showScreen('home');
+      },'Home');
     }
   } else {
     state='checked-wrong';streak=0;buildExplBad(c);
@@ -2472,7 +2475,10 @@ function checkOrder(){
       localStorage.setItem('shelver-daily-'+dailyKey,'attempted');
       initDailyBadge();
       lockDailyChallengeState();
-      showResultPanel('bad','📋','Daily Challenge attempted','You only get one check each day. Study the correct order below and come back tomorrow.','Correct order: '+sortedB(books).map(b=>b.lines[b.lines.length-1]).join(' → '));
+      showResultOverlay('ok','📋','See you tomorrow!','You used today\'s one Daily Challenge attempt. Study the correct order and come back tomorrow for a new shelf.','Correct order: '+sortedB(books).map(b=>b.lines[b.lines.length-1]).join(' → '),0,0,function(){
+        clearDailyChallengeState();
+        showScreen('home');
+      },'Home');
     }
   }
   upPills();
@@ -2877,7 +2883,7 @@ function assignColors(booksArr){
 }
 
 
-function showResultOverlay(type, icon, heading, body, order, streak, streakMax, onDone){
+function showResultOverlay(type, icon, heading, body, order, streak, streakMax, onDone, buttonLabel){
   var ov=document.getElementById('result-overlay');
   var sheet=document.getElementById('ro-sheet');
   if(!ov){setTimeout(onDone,300);return;}
@@ -2903,7 +2909,7 @@ function showResultOverlay(type, icon, heading, body, order, streak, streakMax, 
   }else{
     streakEl.textContent='';
   }
-  var btnLabel=type==='ok'?'Next →':'Try again →';
+  var btnLabel=buttonLabel||(type==='ok'?'Next →':'Try again →');
   document.getElementById('ro-next-btn').textContent=btnLabel;
   if(type==='ok') sheet.style.background='linear-gradient(160deg,#14532D,#16A34A)';
   else if(type==='bad') sheet.style.background='linear-gradient(160deg,#7F1D1D,#B91C1C)';
@@ -3650,7 +3656,8 @@ function launchDailyChallenge(){
       '',
       0,
       0,
-      function(){}
+      function(){showScreen('home');},
+      'Home'
     );
     return;
   }
