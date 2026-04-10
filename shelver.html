@@ -67,19 +67,37 @@ body{
 
 /* ── LANGUAGE CARDS ── */
 
-@media(max-width:520px){.lang-grid{grid-template-columns:1fr;}}
-.lang-card{background:white;border:1.5px solid var(--border);border-radius:20px;padding:2rem 1rem 1.5rem;cursor:pointer;transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;overflow:hidden;}
-.lang-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:20px 20px 0 0;}
+.lang-grid{display:flex;flex-direction:column;gap:12px;width:100%;}
+.lang-card{
+  background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:18px;
+  cursor:pointer;transition:transform 0.18s ease,box-shadow 0.18s ease,border-color 0.15s;
+  display:flex;align-items:center;overflow:hidden;position:relative;
+  box-shadow:0 2px 12px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.05);
+}
+.lang-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
 .lang-card.en::before{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
 .lang-card.zh::before{background:linear-gradient(90deg,#EF4444,#F97316);}
 .lang-card.ko::before{background:linear-gradient(90deg,#8B5CF6,#EC4899);}
-.lang-card:hover{border-color:var(--ink);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.lang-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.11);}
 .lang-card:active{transform:translateY(-1px);}
-.lang-icon{font-size:42px;line-height:1;}
-.lang-label{font-size:18px;font-weight:600;color:var(--ink);}
+.lang-swatch{
+  width:72px;min-width:72px;align-self:stretch;
+  display:flex;align-items:flex-end;justify-content:center;gap:3px;
+  padding:10px 8px 0;position:relative;
+}
+.lang-card.en .lang-swatch{background:linear-gradient(180deg,#1E3A8A,#1D4ED8);}
+.lang-card.zh .lang-swatch{background:linear-gradient(180deg,#7F1D1D,#991B1B);}
+.lang-card.ko .lang-swatch{background:linear-gradient(180deg,#4C1D95,#5B21B6);}
+.mini-book{border-radius:2px 2px 0 0;flex-shrink:0;}
+.lang-card-body{flex:1;padding:14px 16px 14px 14px;}
+.lang-label{font-size:17px;font-weight:800;color:var(--ink);font-family:'Baloo 2',cursive;margin-bottom:2px;}
 .lang-sub{font-size:12px;color:var(--ink-muted);line-height:1.4;}
-.lang-mini-shelf{display:flex;gap:2px;margin-top:4px;}
-.mini-book{width:8px;height:28px;border-radius:1px 1px 0 0;}
+.lang-pill{
+  display:inline-flex;align-items:center;gap:4px;margin-top:8px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:99px;
+  font-size:11px;font-weight:600;padding:3px 10px;color:var(--ink-muted);
+}
+.lang-arrow{font-size:14px;color:var(--ink-light);padding-right:16px;flex-shrink:0;}
 
 /* ── SECTION CARDS ── */
 
@@ -1263,12 +1281,13 @@ window.addEventListener('unhandledrejection', function(e) {
 <!-- ══ SCREEN 1: Language ══ -->
 <div class="screen" id="screen-lang">
 <div class="wrap">
-  <div class="intro-header">
-    <div class="intro-title">Shelver<em>.</em></div>
-    <div class="intro-sub">Put the books in call number order</div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;margin-top:0.25rem;">
+    <button class="back-btn" onclick="showScreen('home')" style="font-size:13px;">← Home</button>
   </div>
-  <!-- decorative mini shelf -->
-  <div class="shelf-deco" id="deco-shelf"></div>
+  <div class="intro-header" style="margin-bottom:1.5rem;margin-top:0;">
+    <div style="font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--ink);line-height:1.1;">Free Play</div>
+    <div style="font-size:14px;color:var(--ink-muted);margin-top:4px;">Choose a language collection</div>
+  </div>
   <div class="lang-grid" id="lang-grid"></div>
 </div>
 </div>
@@ -2003,11 +2022,20 @@ function buildDecoShelf(){
 // ── Language screen ───────────────────────────────────────────────────────
 function buildLangScreen(){
   const g=document.getElementById('lang-grid');g.innerHTML='';
+  const pillLabels={en:'Fiction, Nonfiction & more',zh:'中文 — Fiction & Nonfiction',ko:'한국어 — Fiction & Nonfiction'};
   NAV.forEach(lang=>{
     const c=document.createElement('div');
     c.className='lang-card '+lang.cls;
-    const mini=lang.miniColors.map(col=>'<div class="mini-book" style="background:'+col+';"></div>').join('');
-    c.innerHTML='<div class="lang-icon">'+lang.icon+'</div><div class="lang-label">'+lang.label+'</div><div class="lang-sub">'+lang.sub+'</div><div class="lang-mini-shelf">'+mini+'</div>';
+    const swatchHeights=[38,32,44,36,40,34];
+    const mini=lang.miniColors.map((col,i)=>'<div class="mini-book" style="background:'+col+';width:9px;height:'+swatchHeights[i]+'px;opacity:0.85;"></div>').join('');
+    c.innerHTML=''
+      +'<div class="lang-swatch">'+mini+'</div>'
+      +'<div class="lang-card-body">'
+        +'<div class="lang-label">'+lang.label+'</div>'
+        +'<div class="lang-sub">'+lang.sub+'</div>'
+        +'<div class="lang-pill">'+(pillLabels[lang.cls]||lang.sub)+'</div>'
+      +'</div>'
+      +'<div class="lang-arrow">›</div>';
     c.addEventListener('click',()=>selectLang(lang));
     g.appendChild(c);
   });
