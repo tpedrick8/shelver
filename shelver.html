@@ -322,6 +322,105 @@ align-self:flex-end;overflow:hidden;}
 /* call number label */
 .b-lbl{background:#FAFAF5;color:#111;font-size:10px;font-weight:800;font-family:'Courier New', monospace;text-align:center;padding:5px 4px 6px;line-height:1.45;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 0 rgba(0,0,0,0.45), 0 2px 5px rgba(0,0,0,0.2);border-top:1px solid rgba(0,0,0,0.08);flex-shrink:0;margin:0 3px 3px;}
 
+/* ── PLAYAWAY SPINE ── */
+.book.is-playaway .b-spine{
+  background:linear-gradient(180deg,#C8400A 0%,#D4500F 15%,#BF3A08 85%,#A83005 100%) !important;
+  border-radius:3px 3px 2px 2px;
+  box-shadow:
+    inset 2px 0 4px rgba(255,255,255,0.12),
+    inset -2px 0 4px rgba(0,0,0,0.25),
+    inset 0 2px 6px rgba(255,255,255,0.08);
+}
+.book.is-playaway .b-spine::before{
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0.12) 0%,
+      rgba(255,255,255,0.06) 20%,
+      transparent 45%,
+      transparent 55%,
+      rgba(0,0,0,0.15) 80%,
+      rgba(0,0,0,0.28) 100%);
+}
+.pla-band{
+  position:absolute;top:0;left:0;right:0;
+  height:22%;min-height:44px;max-height:72px;
+  background:linear-gradient(180deg,#E85208,#C83E06);
+  border-bottom:2px solid rgba(0,0,0,0.35);
+  display:flex;align-items:center;justify-content:center;
+  z-index:4;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,0.15), 0 2px 6px rgba(0,0,0,0.4);
+}
+.pla-band-text{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-family:'Barlow Condensed','Oswald',sans-serif;
+  font-weight:700;
+  font-size:9px;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.95);
+  text-shadow:0 1px 2px rgba(0,0,0,0.5);
+}
+.pla-title{
+  position:absolute;
+  top:24%;bottom:20%;
+  left:0;right:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:4px 3px;
+  z-index:3;
+}
+.pla-title-text{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  color:rgba(255,255,255,0.92);
+  text-align:center;
+  overflow:hidden;
+  text-shadow:0 1px 3px rgba(0,0,0,0.6);
+  line-height:1.15;
+}
+.pla-sticker{
+  position:absolute;
+  bottom:18%;
+  left:50%;transform:translateX(-50%);
+  background:#FAFAF5;
+  border-radius:3px;
+  padding:4px 2px 5px;
+  z-index:5;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.35);
+  text-align:center;
+  line-height:1.45;
+  font-size:11px;
+  font-weight:800;
+  font-family:'Courier New',Courier,monospace;
+  color:#1a1a1a;
+}
+.pla-play{
+  position:absolute;
+  bottom:3%;
+  left:50%;transform:translateX(-50%);
+  width:22px;height:22px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 36%,#FFB347,#E86A00 60%,#C85000 100%);
+  border:1.5px solid rgba(0,0,0,0.3);
+  box-shadow:0 2px 5px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  z-index:5;
+  font-size:8px;
+  color:white;
+  text-shadow:0 1px 2px rgba(0,0,0,0.5);
+}
+.pla-light{
+  position:absolute;
+  bottom:1px;left:0;right:0;
+  text-align:center;
+  font-size:6px;font-weight:800;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  font-family:'DM Sans',sans-serif;
+  z-index:4;
+}
+
 /* ── BUTTON ROW ── */
 .brow{display:flex;gap:8px;margin-bottom:0.85rem;}
 .cbtn{
@@ -1282,7 +1381,7 @@ window.addEventListener('unhandledrejection', function(e) {
 <div class="screen" id="screen-lang">
 <div class="wrap">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;margin-top:0.25rem;">
-    <button class="back-btn" onclick="showScreen('home')" style="font-size:13px;">← Home</button>
+    <button class="back-btn" onclick="goTo('home')" style="font-size:13px;">← Home</button>
   </div>
   <div class="intro-header" style="margin-bottom:1.5rem;margin-top:0;">
     <div style="font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--ink);line-height:1.1;">Free Play</div>
@@ -2095,6 +2194,23 @@ function correctness(){return calcCorrectness(books);}
 function isDewey(){return currentCat&&currentCat.stype==='dewey';}
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]];}return r;}
 
+// ── Playaway spine builder ─────────────────────────────────────────────────
+function buildPlayawaySpine(b, w, h, lblBg){
+  const fs=w<50?9:w<62?10:w<72?11:12;
+  const sticker=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
+  return ''
+    +'<div style="position:absolute;top:0;left:1px;width:3px;bottom:0;background:linear-gradient(90deg,rgba(255,255,255,0.18),transparent);pointer-events:none;z-index:3;border-radius:2px 0 0 2px;"></div>'
+    +'<div class="pla-band">'
+      +'<span class="pla-band-text">Playaway</span>'
+    +'</div>'
+    +'<div class="pla-title">'
+      +'<div class="pla-title-text" style="font-family:\'DM Sans\',sans-serif;font-weight:700;font-size:'+fs+'px;max-height:'+(h*0.42)+'px;">'+b.title+'</div>'
+    +'</div>'
+    +'<div class="pla-sticker" style="width:'+(w-10)+'px;background:'+lblBg+';">'+sticker+'</div>'
+    +'<div class="pla-play">▶</div>'
+    +'<div class="pla-light">Light</div>';
+}
+
 // buildBookEl — shared book DOM builder used by both render() and acadRender()
 // cfg: { booksArr, tapSel, bigMode, shelfSelector, onMove, onTap, dragSrcRef }
 // dragSrcRef is an object { val: null } so the closure can read/write it by reference
@@ -2105,24 +2221,32 @@ function buildBookEl(b, i, cfg){
   const w=Math.max(30, Math.floor((WIDTHS[b.colorIdx%WIDTHS.length]+extra)*scale));
   const h=getBookHeight(b.colorIdx, cfg.shelfSelector)+extra;
   const el=document.createElement('div');
-  el.className='book';
+  const isPlayaway=b.lines[0]==='PLA';
+  el.className='book'+(isPlayaway?' is-playaway':'');
   el.draggable=true;
   el.style.cssText='width:'+w+'px;height:'+h+'px;';
   if(cfg.tapSel===i) el.classList.add('tapped');
   const stc=b.correct===null?'':(b.correct?'ok':'bad');
   const lblBg=b.grade==='l'?'#FFCFDA':b.grade==='u'?'#FFF4AD':'#FAFAF8';
   const lbl=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
-  el.innerHTML='<div class="bst '+stc+'"></div>'
-    +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:2px 2px 1px 1px;overflow:visible;">'
-    +'<div class="b-spine-top"></div>'
-    +'<div class="b-spine-edge"></div>'
-    +'<div class="b-spine-grip"></div>'
-    +'<div style="position:absolute;top:7px;left:50%;transform:translateX(-50%);background:'+col.lt+';color:'+col.fg+';font-size:7px;font-weight:700;font-family:DM Sans,sans-serif;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);white-space:nowrap;max-width:'+(w-8)+'px;overflow:hidden;text-overflow:ellipsis;z-index:3;">'+b.author+'</div>'
-    +((/[\u4e00-\u9fff\uac00-\ud7af]/.test(b.title))
-      ?'<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 3px 50px;"><div style="writing-mode:vertical-rl;transform:none;font-family:DM Sans,sans-serif;font-size:'+(w<55?'13':w<68?'16':'20')+'px;font-weight:700;color:'+col.fg+';letter-spacing:0.08em;text-shadow:0 1px 2px rgba(0,0,0,0.3);">'+b.title+'</div></div>'
-      :'<div style="flex:1;padding-bottom:54px;">'+SPINE_STYLES[b.colorIdx%SPINE_STYLES.length](b.title,col.fg,w,h)+'</div>')
-    +'<div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:'+lblBg+';color:#1a1a1a;border:none;border-radius:3px;width:'+(w-10)+'px;padding:5px 2px 6px;font-size:12px;font-weight:800;font-family:Courier New,Courier,monospace;text-align:center;line-height:1.45;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.3);z-index:2;">'+lbl+'</div>'
-    +'</div>';
+  if(isPlayaway){
+    el.innerHTML='<div class="bst '+stc+'"></div>'
+      +'<div class="b-spine" style="flex:1;position:relative;display:flex;flex-direction:column;border-radius:3px 3px 2px 2px;overflow:hidden;">'
+      +buildPlayawaySpine(b,w,h,lblBg)
+      +'</div>';
+  } else {
+    el.innerHTML='<div class="bst '+stc+'"></div>'
+      +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:2px 2px 1px 1px;overflow:visible;">'
+      +'<div class="b-spine-top"></div>'
+      +'<div class="b-spine-edge"></div>'
+      +'<div class="b-spine-grip"></div>'
+      +'<div style="position:absolute;top:7px;left:50%;transform:translateX(-50%);background:'+col.lt+';color:'+col.fg+';font-size:7px;font-weight:700;font-family:DM Sans,sans-serif;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.15);white-space:nowrap;max-width:'+(w-8)+'px;overflow:hidden;text-overflow:ellipsis;z-index:3;">'+b.author+'</div>'
+      +((/[\u4e00-\u9fff\uac00-\ud7af]/.test(b.title))
+        ?'<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:28px 3px 50px;"><div style="writing-mode:vertical-rl;transform:none;font-family:DM Sans,sans-serif;font-size:'+(w<55?'13':w<68?'16':'20')+'px;font-weight:700;color:'+col.fg+';letter-spacing:0.08em;text-shadow:0 1px 2px rgba(0,0,0,0.3);">'+b.title+'</div></div>'
+        :'<div style="flex:1;padding-bottom:54px;">'+SPINE_STYLES[b.colorIdx%SPINE_STYLES.length](b.title,col.fg,w,h)+'</div>')
+      +'<div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:'+lblBg+';color:#1a1a1a;border:none;border-radius:3px;width:'+(w-10)+'px;padding:5px 2px 6px;font-size:12px;font-weight:800;font-family:Courier New,Courier,monospace;text-align:center;line-height:1.45;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 1px 3px rgba(0,0,0,0.3);z-index:2;">'+lbl+'</div>'
+      +'</div>';
+  }
   attachDragHandlers(el, i, cfg);
   return el;
 }
