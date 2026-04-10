@@ -1019,8 +1019,8 @@ window.addEventListener('unhandledrejection', function(e) {
     <div class="home-logo">
       <div class="home-title">Shelver</div>
     </div>
-    <div class="home-sub">Junior Librarian Academy</div>
-    <div class="home-tagline">Can you put every book in the right place?</div>
+    <div class="home-sub">Shelf University</div>
+    <div class="home-tagline">Train like a librarian. Sort every book into the right place.</div>
   </div>
   <div class="home-shelf-banner">
     <div class="hsb" style="background:#E74C3C;width:22px;height:62px;"></div>
@@ -1062,8 +1062,8 @@ window.addEventListener('unhandledrejection', function(e) {
       </div>
       <div class="home-card-body">
         <div class="home-card-title">Fiction Academy</div>
-        <div class="home-card-sub">Shelve Everybody Picture Books in alphabetical order by author</div>
-        <div class="home-card-badge">Novice · Apprentice · Expert · Legend</div>
+        <div class="home-card-sub">Sort picture books by author in clean alphabetical order</div>
+        <div class="home-card-badge">Story Scout · Spine Sorter · Shelf Star</div>
       </div>
     </div>
 
@@ -1077,8 +1077,8 @@ window.addEventListener('unhandledrejection', function(e) {
       </div>
       <div class="home-card-body">
         <div class="home-card-title">Nonfiction Academy</div>
-        <div class="home-card-sub">Shelve nonfiction books by Dewey Decimal number</div>
-        <div class="home-card-badge">Novice · Apprentice · Expert · Legend</div>
+        <div class="home-card-sub">Sort nonfiction books by Dewey number and call number</div>
+        <div class="home-card-badge">Dewey Detective · Decimal Navigator · Stacks Scholar</div>
       </div>
     </div>
 
@@ -1115,7 +1115,7 @@ window.addEventListener('unhandledrejection', function(e) {
     </div>
 
   </div>
-  <div class="home-footer">Shelver &nbsp;·&nbsp; Junior Librarian Academy</div>
+  <div class="home-footer">Shelver &nbsp;·&nbsp; Shelf University</div>
 </div>
 
 <div class="acad-screen" id="screen-acad" style="display:none;">
@@ -1226,7 +1226,7 @@ window.addEventListener('unhandledrejection', function(e) {
     <div class="name-prompt-icon" id="name-prompt-icon">🎉</div>
     <div class="name-prompt-heading" id="name-prompt-heading">You did it!</div>
     <div class="name-prompt-sub" id="name-prompt-sub">Fiction Academy complete</div>
-    <div class="name-prompt-label">Enter your name for your certificate</div>
+    <div class="name-prompt-label">Enter your name for your Shelf University certificate</div>
     <input class="name-prompt-input" id="cert-name" type="text" placeholder="Your name here" maxlength="40" autocomplete="off">
     <button class="name-prompt-btn" id="cert-submit-btn">Get my certificate!</button>
   </div>
@@ -1241,14 +1241,14 @@ window.addEventListener('unhandledrejection', function(e) {
       <div class="cert-corner tr"></div>
       <div class="cert-corner bl"></div>
       <div class="cert-corner br"></div>
-      <div class="cert-reveal-academy" id="cert-reveal-academy">Junior Librarian Academy</div>
+      <div class="cert-reveal-academy" id="cert-reveal-academy">Shelf University</div>
       <div class="cert-reveal-presents">proudly presents this certificate to</div>
       <div class="cert-reveal-name" id="cert-reveal-name">Your Name</div>
       <div class="cert-reveal-divider"></div>
       <div class="cert-reveal-seal" id="cert-reveal-seal">📚</div>
       <div class="cert-reveal-for" id="cert-reveal-for">for successfully completing</div>
-      <div class="cert-reveal-title" id="cert-reveal-title">Fiction Shelving Academy</div>
-      <div class="cert-reveal-sub">Junior Librarian Academy</div>
+      <div class="cert-reveal-title" id="cert-reveal-title">Fiction Academy</div>
+      <div class="cert-reveal-sub">Shelf University</div>
       <div class="cert-reveal-date" id="cert-reveal-date"></div>
     </div>
   </div>
@@ -2908,7 +2908,7 @@ const ACADEMIES = {
     rawFn: x=>['E',x.c],
   },
   nonfiction: {
-    title: 'Non Fiction Academy',
+    title: 'Nonfiction Academy',
     label: 'Nonfiction (Dewey)',
     isDewey: true,
     shelfHint: 'Sort by the Dewey decimal number — smallest to largest',
@@ -3519,11 +3519,11 @@ function showCertificate(){
 function revealCertificate(){
   const name=document.getElementById('cert-name').value.trim()||'A Junior Librarian';
   const icon=acadCheated?'😈':(acadType==='everybody'?'📚':'🏛️');
-  const title=acadType==='everybody'?'Fiction Shelving Academy':'Nonfiction Shelving Academy';
+  const title=acadType==='everybody'?'Fiction Academy':'Nonfiction Academy';
   document.getElementById('cert-reveal-name').textContent=name;
   document.getElementById('cert-reveal-seal').textContent=icon;
   document.getElementById('cert-reveal-title').textContent=title;
-  document.getElementById('cert-reveal-academy').textContent='Junior Librarian Academy';
+  document.getElementById('cert-reveal-academy').textContent='Shelf University';
   document.getElementById('cert-reveal-for').textContent=acadCheated?'for successfully CHEATING through':'for successfully completing';
   const card=document.getElementById('cert-reveal-card');
   if(acadCheated){
