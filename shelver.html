@@ -2008,6 +2008,7 @@ window.goTo=function goTo(s){
 // ── Build decorative shelf ────────────────────────────────────────────────
 function buildDecoShelf(){
   const shelf=document.getElementById('deco-shelf');
+  if(!shelf)return;
   const colors=['#7F1D1D','#1E3A5F','#14532D','#4A1D96','#78350F','#134E4A','#1C1917','#7C2D12','#1E1B4B','#0C4A6E'];
   const widths=[10,8,12,9,11,8,10,13,9,11];
   const heights=[44,38,50,42,46,40,48,36,44,50];
