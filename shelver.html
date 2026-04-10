@@ -324,7 +324,6 @@ align-self:flex-end;overflow:hidden;}
 
 /* ── PLAYAWAY SPINE ── */
 .book.is-playaway .b-spine{
-  background:linear-gradient(180deg,#C8400A 0%,#D4500F 15%,#BF3A08 85%,#A83005 100%) !important;
   border-radius:3px 3px 2px 2px;
   box-shadow:
     inset 2px 0 4px rgba(255,255,255,0.12),
@@ -341,16 +340,23 @@ align-self:flex-end;overflow:hidden;}
       rgba(0,0,0,0.15) 80%,
       rgba(0,0,0,0.28) 100%);
 }
-.pla-band{
-  position:absolute;top:0;left:0;right:0;
-  height:22%;min-height:44px;max-height:72px;
+.pla-topcap{
+  position:absolute;top:7px;left:50%;transform:translateX(-50%);
+  width:72%;
+  height:18px;
   background:linear-gradient(180deg,#E85208,#C83E06);
-  border-bottom:2px solid rgba(0,0,0,0.35);
-  display:flex;align-items:center;justify-content:center;
   z-index:4;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,0.15), 0 2px 6px rgba(0,0,0,0.4);
+  border-radius:3px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,0.16),0 2px 5px rgba(0,0,0,0.35);
 }
-.pla-band-text{
+.pla-logo{
+  position:absolute;
+  top:32px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:4;
+}
+.pla-logo-text{
   writing-mode:vertical-rl;
   transform:rotate(180deg);
   font-family:'Barlow Condensed','Oswald',sans-serif;
@@ -358,12 +364,12 @@ align-self:flex-end;overflow:hidden;}
   font-size:9px;
   letter-spacing:0.28em;
   text-transform:uppercase;
-  color:rgba(255,255,255,0.95);
-  text-shadow:0 1px 2px rgba(0,0,0,0.5);
+  color:rgba(255,244,235,0.96);
+  text-shadow:0 1px 2px rgba(0,0,0,0.45);
 }
 .pla-title{
   position:absolute;
-  top:24%;bottom:20%;
+  top:24%;bottom:26%;
   left:0;right:0;
   display:flex;align-items:center;justify-content:center;
   padding:4px 3px;
@@ -380,7 +386,7 @@ align-self:flex-end;overflow:hidden;}
 }
 .pla-sticker{
   position:absolute;
-  bottom:18%;
+  bottom:34px;
   left:50%;transform:translateX(-50%);
   background:#FAFAF5;
   border-radius:3px;
@@ -394,9 +400,17 @@ align-self:flex-end;overflow:hidden;}
   font-family:'Courier New',Courier,monospace;
   color:#1a1a1a;
 }
+.pla-footer{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:28px;
+  background:linear-gradient(180deg,#E85208,#C83E06);
+  z-index:4;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.14),0 -1px 0 rgba(0,0,0,0.15);
+}
 .pla-play{
   position:absolute;
-  bottom:3%;
+  bottom:12px;
   left:50%;transform:translateX(-50%);
   width:22px;height:22px;
   border-radius:50%;
@@ -411,7 +425,7 @@ align-self:flex-end;overflow:hidden;}
 }
 .pla-light{
   position:absolute;
-  bottom:1px;left:0;right:0;
+  bottom:3px;left:0;right:0;
   text-align:center;
   font-size:6px;font-weight:800;
   letter-spacing:0.18em;
@@ -2195,18 +2209,20 @@ function isDewey(){return currentCat&&currentCat.stype==='dewey';}
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]];}return r;}
 
 // ── Playaway spine builder ─────────────────────────────────────────────────
-function buildPlayawaySpine(b, w, h, lblBg){
+function buildPlayawaySpine(b, w, h, lblBg, col){
   const fs=w<50?9:w<62?10:w<72?11:12;
   const sticker=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
   return ''
     +'<div style="position:absolute;top:0;left:1px;width:3px;bottom:0;background:linear-gradient(90deg,rgba(255,255,255,0.18),transparent);pointer-events:none;z-index:3;border-radius:2px 0 0 2px;"></div>'
-    +'<div class="pla-band">'
-      +'<span class="pla-band-text">Playaway</span>'
+    +'<div class="pla-topcap"></div>'
+    +'<div class="pla-logo">'
+      +'<span class="pla-logo-text">Playaway</span>'
     +'</div>'
     +'<div class="pla-title">'
-      +'<div class="pla-title-text" style="font-family:\'DM Sans\',sans-serif;font-weight:700;font-size:'+fs+'px;max-height:'+(h*0.42)+'px;">'+b.title+'</div>'
+      +'<div class="pla-title-text" style="font-family:\'DM Sans\',sans-serif;font-weight:700;font-size:'+fs+'px;max-height:'+(h*0.42)+'px;color:'+col.fg+';">'+b.title+'</div>'
     +'</div>'
     +'<div class="pla-sticker" style="width:'+(w-10)+'px;background:'+lblBg+';">'+sticker+'</div>'
+    +'<div class="pla-footer"></div>'
     +'<div class="pla-play">▶</div>'
     +'<div class="pla-light">Light</div>';
 }
@@ -2232,8 +2248,8 @@ function buildBookEl(b, i, cfg){
   const lbl=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
   if(isPlayaway){
     el.innerHTML='<div class="bst '+stc+'"></div>'
-      +'<div class="b-spine" style="flex:1;position:relative;display:flex;flex-direction:column;border-radius:3px 3px 2px 2px;overflow:hidden;">'
-      +buildPlayawaySpine(b,w,h,lblBg)
+      +'<div class="b-spine" style="background:'+col.bg+';flex:1;position:relative;display:flex;flex-direction:column;border-radius:3px 3px 2px 2px;overflow:hidden;">'
+      +buildPlayawaySpine(b,w,h,lblBg,col)
       +'</div>';
   } else {
     el.innerHTML='<div class="bst '+stc+'"></div>'
