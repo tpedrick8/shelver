@@ -189,6 +189,8 @@ height:360px;overflow:hidden;
 .shelf-dir-arrow{background:linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.5), rgba(255,255,255,0.15));}
 .shelf-dir-arrow::after{content:'▶';position:absolute;right:-5px;top:50%;transform:translateY(-50%);font-size:7px;color:rgba(255,255,255,0.45);line-height:1;}
 .shelf-books{display:flex;gap:3px;align-items:flex-end;flex:1;overflow:hidden;padding:0 0 22px 0;min-height:0;box-sizing:border-box;position:relative;z-index:4;}
+.shelf-books.daily-locked{pointer-events:none;}
+.shelf-books.daily-locked .book{cursor:default;}
 .shelf-endcap {
   position: absolute;
   top: 0; bottom: 0;
@@ -1082,7 +1084,7 @@ window.addEventListener('unhandledrejection', function(e) {
       </div>
     </div>
 
-    <div class="home-card daily" id="btn-daily" style="opacity:0.4;pointer-events:none;filter:grayscale(1);">
+    <div class="home-card daily" id="btn-daily">
       <div class="home-mini-shelf">
         <div class="hms" style="background:#0EA5E9;width:18px;height:52px;"></div>
         <div class="hms" style="background:#6366F1;width:22px;height:60px;"></div>
@@ -1092,7 +1094,7 @@ window.addEventListener('unhandledrejection', function(e) {
       </div>
       <div class="home-card-body">
         <div class="home-card-title">Daily Challenge</div>
-        <div class="home-card-sub">Today's 5 books — same for every student</div>
+        <div class="home-card-sub">Today's 8 books — one attempt for every student</div>
         <div class="home-card-badge" id="daily-badge">📅 Loading…</div>
       </div>
     </div>
@@ -2049,6 +2051,7 @@ function selectSection(lang,sec){
 }
 
 function launchGame(cat){
+  clearDailyChallengeState();
   currentCat=cat;
   document.getElementById('cat-badge-label').textContent=cat.label;
   goTo('game');
@@ -2219,10 +2222,39 @@ function getDailyDateKey(){
 function getDailySeed(key){
   var s=0;for(var i=0;i<key.length;i++)s=(s*31+key.charCodeAt(i))|0;return s;
 }
+function clearDailyChallengeState(){
+  window._isDailyChallenge=null;
+  window._dailyChallengeLocked=false;
+  var shelf=document.getElementById('shelf');
+  if(shelf)shelf.classList.remove('daily-locked');
+  var newBtn=document.getElementById('new-btn');
+  var settingsBtn=document.getElementById('settings-btn');
+  var ctrls=document.getElementById('game-ctrls');
+  if(newBtn)newBtn.disabled=false;
+  if(settingsBtn){
+    settingsBtn.disabled=false;
+    settingsBtn.classList.remove('active-toggle');
+    settingsBtn.textContent='⚙ Settings';
+  }
+  if(ctrls)ctrls.style.display='none';
+}
+function lockDailyChallengeState(){
+  window._dailyChallengeLocked=true;
+  tapSel=null;
+  var shelf=document.getElementById('shelf');
+  if(shelf)shelf.classList.add('daily-locked');
+  var checkBtn=document.getElementById('check-btn');
+  var hintBtn=document.getElementById('hint-btn');
+  var undoBtn=document.getElementById('undo-btn');
+  if(checkBtn)checkBtn.disabled=true;
+  if(hintBtn)hintBtn.disabled=true;
+  if(undoBtn)undoBtn.disabled=true;
+}
 
 // ── Game ──────────────────────────────────────────────────────────────────
 function newGame(){
   if(!currentCat)return;
+  clearDailyChallengeState();
   stopTimer();state='idle';hints=3;moves=0;checks=0;history=[];tapSel=null;roundScored=false;
   hideResultPanel();sd('stars-row','none');const rs=document.getElementById('round-score');if(rs)rs.textContent='';
   document.getElementById('reveal-btn').style.display='none';
@@ -2371,12 +2403,14 @@ function clearCheckedState(){
   document.getElementById('reveal-btn').style.display='none';
 }
 function afterMove(){
+  if(window._dailyChallengeLocked)return;
   moves++;upMoves();
   clearCheckedState();
   render();
 }
 function upMoves(){document.getElementById('moves-pill').textContent='Moves: '+moves;}
 function doUndo(){
+  if(window._dailyChallengeLocked)return;
   if(!history.length)return;
   books=history.pop();if(!history.length)document.getElementById('undo-btn').disabled=true;
   moves=Math.max(0,moves-1);upMoves();
@@ -2384,6 +2418,7 @@ function doUndo(){
   render();
 }
 function doHint(){
+  if(window._dailyChallengeLocked)return;
   if(hints<=0)return;
   const c=correctness(),wi=c.findIndex(x=>!x);
   if(wi===-1){showExpl('All books look correct! Try checking your shelf.');return;}
@@ -2397,8 +2432,10 @@ function doHint(){
 function doReveal(){showExpl('Correct order: '+sortedB(books).map(b=>b.lines[b.lines.length-1]).join(' → '));}
 
 function checkOrder(){
+  if(window._dailyChallengeLocked)return;
   checks++;
   stopTimer();
+  const dailyKey=window._isDailyChallenge;
   const alreadyScored=roundScored;
   const c=correctness();
   books=books.map((b,i)=>({...b,correct:c[i]}));
@@ -2413,7 +2450,7 @@ function checkOrder(){
     }else{
       roundScored=true;
       streak++;if(streak>best)best=streak;
-      const hintsUsed=3-hints;
+      const hintsUsed=dailyKey?0:3-hints;
       const stars=checks===1&&hintsUsed===0?3:checks<=2&&hintsUsed===0?2:1;
       const pts=level*(stars===3?30:stars===2?20:10);
       score+=pts;
@@ -2422,14 +2459,21 @@ function checkOrder(){
     }
     document.getElementById('reveal-btn').style.display='none';
     // Daily challenge completion tracking
-    if(window._isDailyChallenge&&!alreadyScored){
-      localStorage.setItem('shelver-daily-'+window._isDailyChallenge,'1');
-      window._isDailyChallenge=null;
+    if(dailyKey&&!alreadyScored){
+      localStorage.setItem('shelver-daily-'+dailyKey,'1');
       initDailyBadge();
+      lockDailyChallengeState();
+      showResultPanel('ok','🏅','Daily Challenge complete','Perfect work. One attempt, eight books, and you got them all.','Come back tomorrow for a new challenge.');
     }
   } else {
     state='checked-wrong';streak=0;buildExplBad(c);
     document.getElementById('reveal-btn').style.display='';
+    if(dailyKey){
+      localStorage.setItem('shelver-daily-'+dailyKey,'attempted');
+      initDailyBadge();
+      lockDailyChallengeState();
+      showResultPanel('bad','📋','Daily Challenge attempted','You only get one check each day. Study the correct order below and come back tomorrow.','Correct order: '+sortedB(books).map(b=>b.lines[b.lines.length-1]).join(' → '));
+    }
   }
   upPills();
 }
@@ -3589,13 +3633,27 @@ function initDailyBadge(){
   var d=new Date();
   var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var label=months[d.getMonth()]+' '+d.getDate();
-  badge.textContent=done?'✅ Done — '+label:'📅 '+label;
+  badge.textContent=done==='1'?'✅ Done — '+label:done==='attempted'?'📋 Attempted — '+label:'📅 '+label;
   var card=document.getElementById('btn-daily');
-  if(card)card.classList.toggle('done',!!done);
+  if(card)card.classList.toggle('done',done==='1');
 }
 
 function launchDailyChallenge(){
   var key=getDailyDateKey();
+  var existing=localStorage.getItem('shelver-daily-'+key);
+  if(existing){
+    showResultOverlay(
+      'ok',
+      existing==='1'?'✅':'📋',
+      existing==='1'?'Already completed':'Already attempted',
+      'You already played today\'s Daily Challenge. Come back tomorrow for a new shelf.',
+      '',
+      0,
+      0,
+      function(){}
+    );
+    return;
+  }
   var seed=getDailySeed(key);
   var rng=seededRNG(seed);
 
@@ -3619,7 +3677,7 @@ function launchDailyChallenge(){
   var pool=dailyCat.stype==='dewey'?mkDewey(dailyCat.rawSrc,dailyCat.rawFn):mkAlpha(dailyCat.rawSrc,dailyCat.rawFn);
   difficulty=savedDiff;
 
-  var picked=seededShuffle(pool,rng).slice(0,5);
+  var picked=seededShuffle(pool,rng).slice(0,8);
   var displayed=seededShuffle(picked,rng);
   var tries=0;
   while(isSorted(displayed)&&tries++<20)displayed=seededShuffle(picked,seededRNG(seed+tries));
@@ -3633,12 +3691,16 @@ function launchDailyChallenge(){
   }));
 
   // Reset game state (mirrors newGame())
-  stopTimer();state='idle';hints=3;moves=0;checks=0;history=[];tapSel=null;
+  stopTimer();state='idle';hints=0;moves=0;checks=0;history=[];tapSel=null;roundScored=false;
+  window._dailyChallengeLocked=false;
   hideResultPanel();sd('stars-row','none');
   var rs=document.getElementById('round-score');if(rs)rs.textContent='';
   document.getElementById('reveal-btn').style.display='none';
-  document.getElementById('hint-btn').disabled=false;
-  document.getElementById('hint-btn').textContent='Hint (3)';
+  var shelf=document.getElementById('shelf');
+  if(shelf)shelf.classList.remove('daily-locked');
+  document.getElementById('check-btn').disabled=false;
+  document.getElementById('hint-btn').disabled=true;
+  document.getElementById('hint-btn').textContent='No hints';
   document.getElementById('undo-btn').disabled=true;
   upMoves();
 
@@ -3647,6 +3709,9 @@ function launchDailyChallenge(){
   var hint=dailyCat.stype==='dewey'?'Sort by the Dewey decimal number':'Sort by the last label line ('+last.replace(/[A-Z]{2,}/,'AAA')+')';
   document.getElementById('game-shelf-lbl').textContent=hint+' · drag or tap two books to swap';
   var so=document.getElementById('game-shelf-outer');if(so)so.className='shelf-outer diff-easy';
+  document.getElementById('new-btn').disabled=true;
+  document.getElementById('settings-btn').disabled=true;
+  document.getElementById('game-ctrls').style.display='none';
 
   // Mark as in-progress so checkOrder() can save completion
   window._isDailyChallenge=key;
