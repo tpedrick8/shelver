@@ -2218,10 +2218,11 @@ function buildBookEl(b, i, cfg){
   const col=SC[b.colorIdx%SC.length];
   const extra=cfg.bigMode?18:0;
   const scale=cfg.widthScale||1;
-  const w=Math.max(30, Math.floor((WIDTHS[b.colorIdx%WIDTHS.length]+extra)*scale));
+  const isPlayaway=b.lines[0]==='PLA';
+  const baseW=isPlayaway?52:WIDTHS[b.colorIdx%WIDTHS.length];
+  const w=Math.max(30, Math.floor((baseW+extra)*scale));
   const h=getBookHeight(b.colorIdx, cfg.shelfSelector)+extra;
   const el=document.createElement('div');
-  const isPlayaway=b.lines[0]==='PLA';
   el.className='book'+(isPlayaway?' is-playaway':'');
   el.draggable=true;
   el.style.cssText='width:'+w+'px;height:'+h+'px;';
