@@ -2268,7 +2268,7 @@ function attachDragHandlers(el, i, cfg){
     e.dataTransfer.effectAllowed='move';
     e.dataTransfer.setData('text/plain',String(i));
     const clone=el.cloneNode(true);
-    clone.style.cssText='position:fixed;top:-1000px;left:-1000px;width:'+el.offsetWidth+'px;transform:rotate(-3deg) scale(1.06);opacity:0.95;border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);pointer-events:none;';
+    clone.style.cssText='position:fixed;top:-1000px;left:-1000px;width:'+el.offsetWidth+'px;height:'+el.offsetHeight+'px;transform:rotate(-3deg) scale(1.06);opacity:0.95;border-radius:3px;box-shadow:4px 8px 16px rgba(0,0,0,0.6);pointer-events:none;';
     document.body.appendChild(clone);
     e.dataTransfer.setDragImage(clone,el.offsetWidth/2,el.offsetHeight/2);
     setTimeout(()=>document.body.removeChild(clone),0);
