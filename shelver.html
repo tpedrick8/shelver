@@ -2201,7 +2201,7 @@ function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.
 
 // ── Playaway spine builder ─────────────────────────────────────────────────
 function buildPlayawaySpine(b, w, h, col){
-  const titleFs=w<46?13:w<54?15:w<62?17:20;
+  const titleFs=w<46?11:w<54?13:w<62?15:17;
   const authorFs=w<46?7:w<54?8:9;
   const stickerFs=w<46?9:w<54?10:11;
   const sticker=b.lines.map(l=>'<span style="display:block;">'+l+'</span>').join('');
